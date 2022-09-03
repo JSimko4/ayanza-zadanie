@@ -14,6 +14,7 @@ export default defineComponent({
       stickyNotes: [] as Note[],
       emojis: [] as Emoji[],
       currentDragged: undefined as Note | Emoji | undefined,
+      currentResized: undefined as Note | Emoji | undefined,
 
       emojiCodes: ["😍", "👍", "👎", "😭", "😕", "😐", "😊"],
       colorCodes: ["#fdddef", "#e3d7fb", "#cff4e8", "#fff7cf"],
@@ -30,6 +31,9 @@ export default defineComponent({
         cursorInitialY: 0,
         currentX: 50,
         currentY: 50,
+        currentHeight: 200,
+        currentWidth: 200,
+        resizePosition: "",
       });
     },
     addEmoji() {
@@ -41,6 +45,9 @@ export default defineComponent({
         cursorInitialY: 0,
         currentX: 50,
         currentY: 50,
+        currentHeight: 100,
+        currentWidth: 100,
+        resizePosition: "",
       });
     },
     removeNote(id: number) {
@@ -54,8 +61,18 @@ export default defineComponent({
       });
     },
 
+    onMouseMove(event: any) {
+      if (this.currentDragged !== undefined) {
+        this.onDrag(event);
+      } else if (this.currentResized !== undefined) {
+        this.onDragResize(event);
+      }
+    },
+
     // drag-move board objects
     startDrag(event: any, id: number) {
+      this.currentResized = undefined; // stop resizing
+
       // concat object arrays
       const combinedArr: (Note | Emoji)[] = [
         ...this.stickyNotes,
@@ -94,6 +111,127 @@ export default defineComponent({
         this.currentDragged = undefined;
       }
     },
+
+    // drag-resize board objects
+    startDragResize(event: any, id: number, position: string) {
+      // concat object arrays
+      const combinedArr: (Note | Emoji)[] = [
+        ...this.stickyNotes,
+        ...this.emojis,
+      ];
+
+      // find specific board object by id
+      this.currentResized = combinedArr.find(
+        (element: Note | Emoji) => element.id === id
+      );
+
+      if (this.currentResized !== undefined) {
+        this.currentResized.resizePosition = position;
+        this.currentResized.cursorInitialX = event.clientX;
+        this.currentResized.cursorInitialY = event.clientY;
+      }
+    },
+    updateResizedObject(
+      newWidth: number,
+      newHeight: number,
+      newX: number | undefined,
+      newY: number | undefined
+    ) {
+      const minWidth = 60;
+      const minHeight = 80;
+
+      if (this.currentResized !== undefined) {
+        // check & update width
+        if (newWidth > minWidth) {
+          this.currentResized.currentWidth = newWidth;
+        }
+
+        // check & update height
+        if (newHeight > minHeight) {
+          this.currentResized.currentHeight = newHeight;
+        }
+
+        // update x coordinate
+        if (newX !== undefined) {
+          this.currentResized.currentX = newX;
+        }
+
+        // update y coordinate
+        if (newY !== undefined) {
+          this.currentResized.currentY = newY;
+        }
+
+        // stop resize
+        if (newWidth < minWidth || newHeight < minHeight) {
+          this.stopDragResize();
+        }
+      }
+    },
+    onDragResize(event: any) {
+      if (this.currentResized !== undefined) {
+        let newWidth = 0;
+        let newHeight = 0;
+        let newX = undefined;
+        let newY = undefined;
+
+        // calculate new dimensions
+        if (this.currentResized.resizePosition === "bottom-right") {
+          newWidth =
+            this.currentResized.currentWidth +
+            event.clientX -
+            this.currentResized.cursorInitialX;
+          newHeight =
+            this.currentResized.currentHeight +
+            event.clientY -
+            this.currentResized.cursorInitialY;
+        } else if (this.currentResized.resizePosition === "bottom-left") {
+          newWidth =
+            this.currentResized.currentWidth -
+            (event.clientX - this.currentResized.cursorInitialX);
+          newHeight =
+            this.currentResized.currentHeight +
+            (event.clientY - this.currentResized.cursorInitialY);
+          newX =
+            this.currentResized.currentX +
+            (event.clientX - this.currentResized.cursorInitialX);
+        } else if (this.currentResized.resizePosition === "top-right") {
+          newWidth =
+            this.currentResized.currentWidth +
+            (event.clientX - this.currentResized.cursorInitialX);
+          newHeight =
+            this.currentResized.currentHeight -
+            (event.clientY - this.currentResized.cursorInitialY);
+          newY =
+            this.currentResized.currentY +
+            (event.clientY - this.currentResized.cursorInitialY);
+        } else if (this.currentResized.resizePosition === "top-left") {
+          newWidth =
+            this.currentResized.currentWidth -
+            (event.clientX - this.currentResized.cursorInitialX);
+          newHeight =
+            this.currentResized.currentHeight -
+            (event.clientY - this.currentResized.cursorInitialY);
+          newX =
+            this.currentResized.currentX +
+            (event.clientX - this.currentResized.cursorInitialX);
+          newY =
+            this.currentResized.currentY +
+            (event.clientY - this.currentResized.cursorInitialY);
+        }
+
+        // update cursor initial positions
+        this.currentResized.cursorInitialX = event.clientX;
+        this.currentResized.cursorInitialY = event.clientY;
+
+        // update object dimensions
+        this.updateResizedObject(newWidth, newHeight, newX, newY);
+      }
+    },
+    stopDragResize() {
+      if (this.currentResized !== undefined) {
+        this.currentResized = undefined;
+      }
+    },
   },
   components: { StickyNote, StickyEmoji },
 });
@@ -104,17 +242,21 @@ export default defineComponent({
     <p class="board-name">{{ boardName }}</p>
   </header>
 
-  <section class="board" @mousemove.prevent="onDrag">
+  <section class="board" @mousemove.prevent="onMouseMove">
     <StickyNote
       v-for="note in stickyNotes"
       :key="note.id"
       :id="note.id"
       :color="note.color"
+      :currentHeight="note.currentHeight"
+      :currentWidth="note.currentWidth"
       :currentX="note.currentX"
       :currentY="note.currentY"
       v-on:remove-note="removeNote"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
+      v-on:start-drag-resize="startDragResize"
+      v-on:stop-drag-resize="stopDragResize"
     />
 
     <StickyEmoji
@@ -122,11 +264,15 @@ export default defineComponent({
       :key="emoji.id"
       :id="emoji.id"
       :emoji="emoji.emoji"
+      :currentWidth="emoji.currentWidth"
+      :currentHeight="emoji.currentHeight"
       :currentX="emoji.currentX"
       :currentY="emoji.currentY"
       v-on:remove-emoji="removeEmoji"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
+      v-on:start-drag-resize="startDragResize"
+      v-on:stop-drag-resize="stopDragResize"
     />
   </section>
 
@@ -138,20 +284,21 @@ export default defineComponent({
 
 <style>
 .board-header {
-  height: 5vh;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  padding: 5px 0px;
 }
 
 .board-name {
   margin: 0px 0px 0px 10px;
   font-weight: bold;
-  font-size: large;
+  font-family: "Inter", sans-serif;
 }
 
 .board {
   height: 95vh;
+  background-image: url("/src/assets/background.png");
 }
 
 .buttons-container {

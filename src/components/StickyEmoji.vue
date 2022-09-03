@@ -1,9 +1,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
+import ObjectResizers from "./ObjectResizers.vue";
 
 export default defineComponent({
   props: {
     id: Number,
+    currentWidth: Number,
+    currentHeight: Number,
     currentX: Number,
     currentY: Number,
     emoji: String,
@@ -11,13 +14,35 @@ export default defineComponent({
   data() {
     return {
       showTopBar: false,
+      showResizers: false,
       zIndex: 0,
     };
   },
-
+  computed: {
+    emojiSize() {
+      if (this.currentWidth !== undefined && this.currentHeight !== undefined) {
+        const biggerDimension =
+          this.currentHeight > this.currentWidth
+            ? this.currentHeight
+            : this.currentWidth;
+        return biggerDimension / 1.5 + "px";
+      }
+      return "15px";
+    },
+  },
   methods: {
     emitRemoveEmoji() {
       this.$emit("remove-emoji", this.id);
+    },
+    // resize
+    onClickResize() {
+      this.showResizers = this.showResizers ? false : true;
+    },
+    emitStartDragResize(event: any, position: string) {
+      this.$emit("start-drag-resize", event, this.id, position);
+    },
+    emitStopDragResize() {
+      this.$emit("stop-drag-resize");
     },
     emitStartDrag(event: any) {
       this.$emit("start-drag", event, this.id);
@@ -35,24 +60,38 @@ export default defineComponent({
       this.zIndex = 0;
     },
   },
+  components: { ObjectResizers },
 });
 </script>
 
 <template>
   <div
     class="emoji-container"
-    @mousedown.prevent="emitStartDrag"
-    @mouseup="emitStopDrag"
     @mouseover="focusEmoji"
     @mouseleave="focusOutEmoji"
     tabindex="0"
   >
     <section class="top-bar" v-show="showTopBar">
-      <i class="material-icons top-bar-icon" @click="emitRemoveEmoji">
+      <span class="material-icons top-bar-icon" @click="onClickResize">
+        aspect_ratio
+      </span>
+      <span class="material-icons top-bar-icon" @click="emitRemoveEmoji">
         cancel
-      </i>
+      </span>
     </section>
-    <span class="emoji">{{ emoji }}</span>
+    <span
+      @mousedown.prevent="emitStartDrag"
+      @mouseup="emitStopDrag"
+      class="emoji"
+      tabindex="0"
+      >{{ emoji }}</span
+    >
+
+    <ObjectResizers
+      :showResizers="showResizers"
+      v-on:start-drag-resize="emitStartDragResize"
+      v-on:stop-drag-resize="emitStopDragResize"
+    />
   </div>
 </template>
 
@@ -61,19 +100,16 @@ export default defineComponent({
   position: absolute;
   left: v-bind(currentX + "px");
   top: v-bind(currentY + "px");
+  width: v-bind(currentWidth + "px");
+  height: v-bind(currentHeight + "px");
   z-index: v-bind(zIndex);
   background-color: transparent;
-  padding: 5px;
-
-  /* edit to resizable later on*/
-  font-size: 50px;
+  padding: 10px;
+  text-align: center;
 }
 .emoji {
   cursor: pointer;
-
-  /* edit to resizable later on*/
-  padding: 3px;
-  font-size: 50px;
+  font-size: v-bind(emojiSize);
 }
 
 .top-bar {
@@ -85,10 +121,11 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 5px;
 }
 
 .top-bar-icon {
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   color: black;
 }

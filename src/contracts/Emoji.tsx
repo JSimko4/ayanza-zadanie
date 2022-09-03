@@ -6,4 +6,8 @@ export default interface Emoji {
   cursorInitialY: number;
   currentX: number;
   currentY: number;
+  currentWidth: number;
+  currentHeight: number;
+
+  resizePosition: string;
 }

@@ -1,9 +1,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
+import ObjectResizers from "./ObjectResizers.vue";
 
 export default defineComponent({
   props: {
     id: Number,
+    currentWidth: Number,
+    currentHeight: Number,
     currentX: Number,
     currentY: Number,
     color: String,
@@ -12,20 +15,33 @@ export default defineComponent({
     return {
       text: "",
       showTopBar: false,
+      showResizers: false,
       zIndex: 0,
     };
   },
-
   methods: {
+    // remove
     emitRemoveNote() {
       this.$emit("remove-note", this.id);
     },
+    // resize
+    onClickResize() {
+      this.showResizers = this.showResizers ? false : true;
+    },
+    emitStartDragResize(event: any, position: string) {
+      this.$emit("start-drag-resize", event, this.id, position);
+    },
+    emitStopDragResize() {
+      this.$emit("stop-drag-resize");
+    },
+    // drag-move
     emitStartDrag(event: any) {
       this.$emit("start-drag", event, this.id);
     },
     emitStopDrag() {
       this.$emit("stop-drag");
     },
+    // focus - show top bar
     focusNote() {
       this.showTopBar = true;
       this.zIndex = 10;
@@ -35,6 +51,7 @@ export default defineComponent({
       this.zIndex = 0;
     },
   },
+  components: { ObjectResizers },
 });
 </script>
 
@@ -46,9 +63,12 @@ export default defineComponent({
       @mousedown.prevent="emitStartDrag"
       @mouseup="emitStopDrag"
     >
-      <i class="material-icons top-bar-icon" @click="emitRemoveNote">
+      <span class="material-icons top-bar-icon" @click="onClickResize">
+        aspect_ratio
+      </span>
+      <span class="material-icons top-bar-icon" @click="emitRemoveNote">
         cancel
-      </i>
+      </span>
     </section>
 
     <textarea
@@ -57,6 +77,12 @@ export default defineComponent({
       @focus="focusNote"
       @focusout="focuOutNote"
     ></textarea>
+
+    <ObjectResizers
+      :showResizers="showResizers"
+      v-on:start-drag-resize="emitStartDragResize"
+      v-on:stop-drag-resize="emitStopDragResize"
+    />
   </div>
 </template>
 
@@ -65,19 +91,17 @@ export default defineComponent({
   position: absolute;
   left: v-bind(currentX + "px");
   top: v-bind(currentY + "px");
+  width: v-bind(currentWidth + "px");
+  height: v-bind(currentHeight + "px");
   z-index: v-bind(zIndex);
-
-  background-color: v-bind(color);
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  /* edit to resizable later on*/
-  width: 200px;
-  height: 200px;
+  background-color: v-bind(color);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .top-bar {
@@ -90,7 +114,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
 
   cursor: move;
 }

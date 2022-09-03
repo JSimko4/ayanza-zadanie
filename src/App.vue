@@ -4,7 +4,7 @@ import WhiteBoardVue from "./components/WhiteBoard.vue";
 
 <template>
   <main>
-    <WhiteBoardVue boardName="Ayanza whiteboard"></WhiteBoardVue>
+    <WhiteBoardVue boardName="Ayanza whiteboard assignment"></WhiteBoardVue>
   </main>
 </template>
 
