@@ -68,7 +68,6 @@ export default defineComponent({
 
   background-color: v-bind(color);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
 
   display: flex;
   flex-direction: column;
@@ -85,7 +84,7 @@ export default defineComponent({
   height: 30px;
   padding: 5px;
   box-sizing: border-box;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.1);
 
   display: flex;
   align-items: center;
@@ -98,14 +97,13 @@ export default defineComponent({
 .top-bar-icon {
   font-size: 20px;
   cursor: pointer;
-  color: white;
+  color: black;
 }
 
 .note-input {
   background: transparent;
   outline: none;
   border: none;
-  color: white;
   width: calc(100% - 20px);
   height: 100%;
   resize: none;

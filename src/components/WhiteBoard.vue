@@ -2,6 +2,8 @@
 import { defineComponent } from "vue";
 import StickyNote from "./StickyNote.vue";
 import type Note from "@/contracts/Note";
+import type Emoji from "@/contracts/Emoji";
+import StickyEmoji from "./StickyEmoji.vue";
 
 export default defineComponent({
   props: {
@@ -10,7 +12,11 @@ export default defineComponent({
   data() {
     return {
       stickyNotes: [] as Note[],
-      currentDragged: undefined as Note | undefined,
+      emojis: [] as Emoji[],
+      currentDragged: undefined as Note | Emoji | undefined,
+
+      emojiCodes: ["😍", "👍", "👎", "😭", "😕", "😐", "😊"],
+      colorCodes: ["#fdddef", "#e3d7fb", "#cff4e8", "#fff7cf"],
       currentId: 0,
     };
   },
@@ -18,11 +24,23 @@ export default defineComponent({
     addStickyNote() {
       this.stickyNotes.push({
         id: this.currentId++,
-        color: "brown",
+        color:
+          this.colorCodes[Math.floor(Math.random() * this.colorCodes.length)],
         cursorInitialX: 0,
         cursorInitialY: 0,
-        currentX: 200,
-        currentY: 250,
+        currentX: 50,
+        currentY: 50,
+      });
+    },
+    addEmoji() {
+      this.emojis.push({
+        id: this.currentId++,
+        emoji:
+          this.emojiCodes[Math.floor(Math.random() * this.colorCodes.length)],
+        cursorInitialX: 0,
+        cursorInitialY: 0,
+        currentX: 50,
+        currentY: 50,
       });
     },
     removeNote(id: number) {
@@ -30,11 +48,23 @@ export default defineComponent({
         return e.id !== id;
       });
     },
+    removeEmoji(id: number) {
+      this.emojis = this.emojis.filter(function (e: Emoji) {
+        return e.id !== id;
+      });
+    },
 
-    // drag move note / emoji
+    // drag-move board objects
     startDrag(event: any, id: number) {
-      this.currentDragged = this.stickyNotes.find(
-        (note: Note) => note.id === id
+      // concat object arrays
+      const combinedArr: (Note | Emoji)[] = [
+        ...this.stickyNotes,
+        ...this.emojis,
+      ];
+
+      // find specific board object by id
+      this.currentDragged = combinedArr.find(
+        (element: Note | Emoji) => element.id === id
       );
 
       // get cursor initial positions
@@ -50,7 +80,7 @@ export default defineComponent({
         const cursorOffsetY =
           this.currentDragged.currentY - this.currentDragged.cursorInitialY;
 
-        // update note / emoji current positions
+        // update dragged board object positions
         this.currentDragged.currentX = cursorOffsetX + event.clientX;
         this.currentDragged.currentY = cursorOffsetY + event.clientY;
 
@@ -65,7 +95,7 @@ export default defineComponent({
       }
     },
   },
-  components: { StickyNote },
+  components: { StickyNote, StickyEmoji },
 });
 </script>
 
@@ -86,10 +116,23 @@ export default defineComponent({
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
     />
+
+    <StickyEmoji
+      v-for="emoji in emojis"
+      :key="emoji.id"
+      :id="emoji.id"
+      :emoji="emoji.emoji"
+      :currentX="emoji.currentX"
+      :currentY="emoji.currentY"
+      v-on:remove-note="removeNote"
+      v-on:start-drag="startDrag"
+      v-on:stop-drag="stopDrag"
+    />
   </section>
 
   <footer class="buttons-container">
-    <i class="material-icons button" @click="addStickyNote">note_add</i>
+    <span class="material-icons button" @click="addStickyNote">note_add</span>
+    <span class="button" @click="addEmoji">{{ emojiCodes[0] }}</span>
   </footer>
 </template>
 

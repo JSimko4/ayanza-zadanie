@@ -1,6 +1,6 @@
-export default interface Note {
+export default interface Emoji {
   id: number;
-  color: string;
+  emoji: string;
 
   cursorInitialX: number;
   cursorInitialY: number;
