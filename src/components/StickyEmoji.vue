@@ -16,8 +16,8 @@ export default defineComponent({
   },
 
   methods: {
-    emitRemoveNote() {
-      this.$emit("remove-note", this.id);
+    emitRemoveEmoji() {
+      this.$emit("remove-emoji", this.id);
     },
     emitStartDrag(event: any) {
       this.$emit("start-drag", event, this.id);
@@ -25,6 +25,13 @@ export default defineComponent({
     },
     emitStopDrag() {
       this.$emit("stop-drag");
+    },
+    focusEmoji() {
+      this.showTopBar = true;
+      this.zIndex = 10;
+    },
+    focusOutEmoji() {
+      this.showTopBar = false;
       this.zIndex = 0;
     },
   },
@@ -32,45 +39,56 @@ export default defineComponent({
 </script>
 
 <template>
-  <span
-    class="emoji"
+  <div
+    class="emoji-container"
     @mousedown.prevent="emitStartDrag"
     @mouseup="emitStopDrag"
-    >{{ emoji }}</span
+    @mouseover="focusEmoji"
+    @mouseleave="focusOutEmoji"
+    tabindex="0"
   >
+    <section class="top-bar" v-show="showTopBar">
+      <i class="material-icons top-bar-icon" @click="emitRemoveEmoji">
+        cancel
+      </i>
+    </section>
+    <span class="emoji">{{ emoji }}</span>
+  </div>
 </template>
 
 <style scoped>
-.emoji {
+.emoji-container {
   position: absolute;
   left: v-bind(currentX + "px");
   top: v-bind(currentY + "px");
   z-index: v-bind(zIndex);
-  cursor: pointer;
-
-  background-color: tranasparent;
+  background-color: transparent;
+  padding: 5px;
 
   /* edit to resizable later on*/
   font-size: 50px;
 }
+.emoji {
+  cursor: pointer;
+
+  /* edit to resizable later on*/
+  padding: 3px;
+  font-size: 50px;
+}
 
 .top-bar {
+  position: absolute;
+  top: 2px;
+  right: 2px;
   width: 100%;
-  height: 30px;
-  padding: 5px;
-  box-sizing: border-box;
-  background-color: rgba(0, 0, 0, 0.1);
 
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
-
-  cursor: move;
 }
 
 .top-bar-icon {
-  font-size: 20px;
+  font-size: 15px;
   cursor: pointer;
   color: black;
 }

@@ -124,7 +124,7 @@ export default defineComponent({
       :emoji="emoji.emoji"
       :currentX="emoji.currentX"
       :currentY="emoji.currentY"
-      v-on:remove-note="removeNote"
+      v-on:remove-emoji="removeEmoji"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
     />
