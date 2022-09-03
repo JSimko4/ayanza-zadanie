@@ -22,10 +22,16 @@ export default defineComponent({
     },
     emitStartDrag(event: any) {
       this.$emit("start-drag", event, this.id);
-      this.zIndex = 10;
     },
     emitStopDrag() {
       this.$emit("stop-drag");
+    },
+    focusNote() {
+      this.showTopBar = true;
+      this.zIndex = 10;
+    },
+    focuOutNote() {
+      this.showTopBar = false;
       this.zIndex = 0;
     },
   },
@@ -33,12 +39,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    @focus="showTopBar = true"
-    @focusout="showTopBar = false"
-    tabindex="0"
-    class="note"
-  >
+  <div @focus="focusNote" @focusout="focuOutNote" tabindex="0" class="note">
     <section
       v-show="showTopBar"
       class="top-bar"
@@ -53,8 +54,8 @@ export default defineComponent({
     <textarea
       v-model="text"
       class="note-input"
-      @focus="showTopBar = true"
-      @focusout="showTopBar = false"
+      @focus="focusNote"
+      @focusout="focuOutNote"
     ></textarea>
   </div>
 </template>
