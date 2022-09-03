@@ -1,6 +1,10 @@
 export default interface Note {
   id: number;
-  text: string;
-  top: number;
-  left: number; // coordinates
+  color: string;
+
+  cursorInitialX: number;
+  cursorInitialY: number;
+
+  currentX: number;
+  currentY: number;
 }
