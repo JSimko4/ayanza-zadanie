@@ -10,9 +10,9 @@ export default defineComponent({
   },
   data() {
     return {
-      text: "test",
+      text: "",
       showTopBar: false,
-      isDragging: false,
+      zIndex: 0,
     };
   },
 
@@ -22,12 +22,13 @@ export default defineComponent({
     },
     emitStartDrag(event: any) {
       this.$emit("start-drag", event, this.id);
+      this.zIndex = 10;
     },
     emitStopDrag() {
       this.$emit("stop-drag");
+      this.zIndex = 0;
     },
   },
-  watch: {},
 });
 </script>
 
@@ -63,7 +64,7 @@ export default defineComponent({
   position: absolute;
   left: v-bind(currentX + "px");
   top: v-bind(currentY + "px");
-  z-index: 9;
+  z-index: v-bind(zIndex);
 
   background-color: v-bind(color);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -85,7 +86,6 @@ export default defineComponent({
   padding: 5px;
   box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0.25);
-  z-index: 10;
 
   display: flex;
   align-items: center;

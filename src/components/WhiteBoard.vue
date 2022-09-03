@@ -45,17 +45,14 @@ export default defineComponent({
     },
     onDrag(event: any) {
       if (this.currentDragged !== undefined) {
-        console.log("mouse move");
+        const cursorOffsetX =
+          this.currentDragged.currentX - this.currentDragged.cursorInitialX;
+        const cursorOffsetY =
+          this.currentDragged.currentY - this.currentDragged.cursorInitialY;
 
         // update note / emoji current positions
-        this.currentDragged.currentX =
-          this.currentDragged.currentX -
-          this.currentDragged.cursorInitialX +
-          event.clientX;
-        this.currentDragged.currentY =
-          this.currentDragged.currentY -
-          this.currentDragged.cursorInitialY +
-          event.clientY;
+        this.currentDragged.currentX = cursorOffsetX + event.clientX;
+        this.currentDragged.currentY = cursorOffsetY + event.clientY;
 
         // update cursor initial positions
         this.currentDragged.cursorInitialX = event.clientX;
@@ -92,7 +89,6 @@ export default defineComponent({
   </section>
 
   <footer class="buttons-container">
-    <i class="material-icons button">pan_tool</i>
     <i class="material-icons button" @click="addStickyNote">note_add</i>
   </footer>
 </template>
