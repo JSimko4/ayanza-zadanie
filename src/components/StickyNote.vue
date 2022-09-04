@@ -64,7 +64,11 @@ export default defineComponent({
       @mousedown.prevent="emitStartDrag"
       @mouseup="emitStopDrag"
     >
-      <span class="material-icons top-bar-icon" @click="onClickResize">
+      <span
+        class="material-icons top-bar-icon"
+        :class="{ 'active-top-bar-icon': showResizers }"
+        @click="onClickResize"
+      >
         aspect_ratio
       </span>
       <span class="material-icons top-bar-icon" @click="emitRemoveNote">
@@ -125,6 +129,10 @@ export default defineComponent({
   font-size: 20px;
   cursor: pointer;
   color: black;
+}
+
+.active-top-bar-icon {
+  color: #8132fc;
 }
 
 .note-input {

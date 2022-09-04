@@ -22,11 +22,11 @@ export default defineComponent({
   computed: {
     emojiSize() {
       if (this.currentWidth !== undefined && this.currentHeight !== undefined) {
-        const biggerDimension =
+        const smallerDimension =
           this.currentHeight > this.currentWidth
-            ? this.currentHeight
-            : this.currentWidth;
-        return biggerDimension / 1.5 + "px";
+            ? this.currentWidth
+            : this.currentHeight;
+        return smallerDimension / 1.25 + "px";
       }
       return "15px";
     },
@@ -73,7 +73,11 @@ export default defineComponent({
     tabindex="0"
   >
     <section class="top-bar" v-show="showTopBar">
-      <span class="material-icons top-bar-icon" @click="onClickResize">
+      <span
+        class="material-icons top-bar-icon"
+        :class="{ 'active-top-bar-icon': showResizers }"
+        @click="onClickResize"
+      >
         aspect_ratio
       </span>
       <span class="material-icons top-bar-icon" @click="emitRemoveEmoji">
@@ -107,7 +111,11 @@ export default defineComponent({
   z-index: v-bind(zIndex);
   background-color: transparent;
   padding: 10px;
-  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .emoji {
   cursor: pointer;
@@ -116,8 +124,8 @@ export default defineComponent({
 
 .top-bar {
   position: absolute;
-  top: 2px;
-  right: 2px;
+  top: -2px;
+  right: 7px;
   width: 100%;
 
   display: flex;
@@ -130,5 +138,9 @@ export default defineComponent({
   font-size: 16px;
   cursor: pointer;
   color: black;
+}
+
+.active-top-bar-icon {
+  color: #8132fc;
 }
 </style>

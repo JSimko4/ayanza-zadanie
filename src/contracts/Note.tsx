@@ -9,5 +9,5 @@ export default interface Note {
   currentWidth: number;
   currentHeight: number;
 
-  resizePosition: string;
+  activeResizePosition: string;
 }

@@ -9,5 +9,5 @@ export default interface Emoji {
   currentWidth: number;
   currentHeight: number;
 
-  resizePosition: string;
+  activeResizePosition: string;
 }

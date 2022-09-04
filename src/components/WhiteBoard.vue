@@ -33,7 +33,7 @@ export default defineComponent({
         currentY: 50,
         currentHeight: 200,
         currentWidth: 200,
-        resizePosition: "",
+        activeResizePosition: "",
       });
     },
     addEmoji() {
@@ -47,7 +47,7 @@ export default defineComponent({
         currentY: 50,
         currentHeight: 100,
         currentWidth: 100,
-        resizePosition: "",
+        activeResizePosition: "",
       });
     },
     removeNote(id: number) {
@@ -126,20 +126,19 @@ export default defineComponent({
       );
 
       if (this.currentResized !== undefined) {
-        this.currentResized.resizePosition = position;
+        this.currentResized.activeResizePosition = position;
         this.currentResized.cursorInitialX = event.clientX;
         this.currentResized.cursorInitialY = event.clientY;
       }
     },
     updateResizedObject(
+      minWidth: number,
+      minHeight: number,
       newWidth: number,
       newHeight: number,
       newX: number | undefined,
       newY: number | undefined
     ) {
-      const minWidth = 60;
-      const minHeight = 80;
-
       if (this.currentResized !== undefined) {
         // check & update width
         if (newWidth > minWidth) {
@@ -175,7 +174,7 @@ export default defineComponent({
         let newY = undefined;
 
         // calculate new dimensions
-        if (this.currentResized.resizePosition === "bottom-right") {
+        if (this.currentResized.activeResizePosition === "bottom-right") {
           newWidth =
             this.currentResized.currentWidth +
             event.clientX -
@@ -184,7 +183,7 @@ export default defineComponent({
             this.currentResized.currentHeight +
             event.clientY -
             this.currentResized.cursorInitialY;
-        } else if (this.currentResized.resizePosition === "bottom-left") {
+        } else if (this.currentResized.activeResizePosition === "bottom-left") {
           newWidth =
             this.currentResized.currentWidth -
             (event.clientX - this.currentResized.cursorInitialX);
@@ -194,7 +193,7 @@ export default defineComponent({
           newX =
             this.currentResized.currentX +
             (event.clientX - this.currentResized.cursorInitialX);
-        } else if (this.currentResized.resizePosition === "top-right") {
+        } else if (this.currentResized.activeResizePosition === "top-right") {
           newWidth =
             this.currentResized.currentWidth +
             (event.clientX - this.currentResized.cursorInitialX);
@@ -204,7 +203,7 @@ export default defineComponent({
           newY =
             this.currentResized.currentY +
             (event.clientY - this.currentResized.cursorInitialY);
-        } else if (this.currentResized.resizePosition === "top-left") {
+        } else if (this.currentResized.activeResizePosition === "top-left") {
           newWidth =
             this.currentResized.currentWidth -
             (event.clientX - this.currentResized.cursorInitialX);
@@ -223,13 +222,30 @@ export default defineComponent({
         this.currentResized.cursorInitialX = event.clientX;
         this.currentResized.cursorInitialY = event.clientY;
 
+        // set min dimensions (note)
+        let minWidth = 60;
+        let minHeight = 60;
+
+        // set min dimensions (emoji)
+        if ("emoji" in this.currentResized) {
+          minHeight = 30;
+          minWidth = 30;
+        }
+
         // update object dimensions
-        this.updateResizedObject(newWidth, newHeight, newX, newY);
+        this.updateResizedObject(
+          minWidth,
+          minHeight,
+          newWidth,
+          newHeight,
+          newX,
+          newY
+        );
       }
     },
     stopDragResize() {
       if (this.currentResized !== undefined) {
-        this.currentResized.resizePosition = "";
+        this.currentResized.activeResizePosition = ""; // disable active effect for resizer
         this.currentResized = undefined;
       }
     },
@@ -253,7 +269,7 @@ export default defineComponent({
       :currentWidth="note.currentWidth"
       :currentX="note.currentX"
       :currentY="note.currentY"
-      :activeResizePosition="note.resizePosition"
+      :activeResizePosition="note.activeResizePosition"
       v-on:remove-note="removeNote"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
@@ -270,7 +286,7 @@ export default defineComponent({
       :currentHeight="emoji.currentHeight"
       :currentX="emoji.currentX"
       :currentY="emoji.currentY"
-      :activeResizePosition="emoji.resizePosition"
+      :activeResizePosition="emoji.activeResizePosition"
       v-on:remove-emoji="removeEmoji"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
