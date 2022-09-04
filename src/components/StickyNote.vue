@@ -10,6 +10,7 @@ export default defineComponent({
     currentX: Number,
     currentY: Number,
     color: String,
+    activeResizePosition: String,
   },
   data() {
     return {
@@ -80,6 +81,7 @@ export default defineComponent({
 
     <ObjectResizers
       :showResizers="showResizers"
+      :activePosition="activeResizePosition"
       v-on:start-drag-resize="emitStartDragResize"
       v-on:stop-drag-resize="emitStopDragResize"
     />

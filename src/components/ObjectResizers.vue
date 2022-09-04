@@ -4,8 +4,8 @@ import { defineComponent } from "vue";
 export default defineComponent({
   props: {
     showResizers: Boolean,
+    activePosition: String,
   },
-
   methods: {
     emitStartDragResize(event: any, position: string) {
       this.$emit("start-drag-resize", event, position);
@@ -21,22 +21,26 @@ export default defineComponent({
   <section v-if="showResizers">
     <div
       class="resizer resizer-top-left"
+      :class="{ 'active-resizer': activePosition === 'top-left' }"
       @mousedown.prevent="emitStartDragResize($event, 'top-left')"
       @mouseup="emitStopDragResize"
     ></div>
     <div
       class="resizer resizer-bottom-left"
+      :class="{ 'active-resizer': activePosition === 'bottom-left' }"
       @mousedown.prevent="emitStartDragResize($event, 'bottom-left')"
       @mouseup="emitStopDragResize"
     ></div>
 
     <div
-      class="resizer resizer-top-right"
+      class="resizer resizer resizer-top-right"
+      :class="{ 'active-resizer': activePosition === 'top-right' }"
       @mousedown.prevent="emitStartDragResize($event, 'top-right')"
       @mouseup="emitStopDragResize"
     ></div>
     <div
       class="resizer resizer-bottom-right"
+      :class="{ 'active-resizer': activePosition === 'bottom-right' }"
       @mousedown.prevent="emitStartDragResize($event, 'bottom-right')"
       @mouseup="emitStopDragResize"
     ></div>
@@ -45,12 +49,20 @@ export default defineComponent({
 
 <style scoped>
 .resizer {
-  width: 10px;
-  height: 10px;
-  background: red;
   position: absolute;
-  border-radius: 50%;
+  width: 8px;
+  height: 8px;
   z-index: 50;
+  border: 2px solid #8132fc;
+  background: white;
+}
+
+.disabled-resizer {
+  background: white;
+}
+
+.active-resizer {
+  background: #8132fc;
 }
 
 .resizer-top-left {

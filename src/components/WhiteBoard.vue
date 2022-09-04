@@ -229,6 +229,7 @@ export default defineComponent({
     },
     stopDragResize() {
       if (this.currentResized !== undefined) {
+        this.currentResized.resizePosition = "";
         this.currentResized = undefined;
       }
     },
@@ -252,6 +253,7 @@ export default defineComponent({
       :currentWidth="note.currentWidth"
       :currentX="note.currentX"
       :currentY="note.currentY"
+      :activeResizePosition="note.resizePosition"
       v-on:remove-note="removeNote"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
@@ -268,6 +270,7 @@ export default defineComponent({
       :currentHeight="emoji.currentHeight"
       :currentX="emoji.currentX"
       :currentY="emoji.currentY"
+      :activeResizePosition="emoji.resizePosition"
       v-on:remove-emoji="removeEmoji"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
