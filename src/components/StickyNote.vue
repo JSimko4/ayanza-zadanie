@@ -17,7 +17,6 @@ export default defineComponent({
     return {
       text: "",
       showTopBar: false,
-      showResizers: false,
       zIndex: 0,
     };
   },
@@ -27,9 +26,6 @@ export default defineComponent({
     },
 
     // resize functions
-    onClickResize() {
-      this.showResizers = this.showResizers ? false : true;
-    },
     emitStartDragResize(event: any, position: string) {
       this.$emit("start-drag-resize", event, this.id, position);
     },
@@ -39,11 +35,14 @@ export default defineComponent({
 
     // connection functions
     emitStartConnection() {
-      this.$emit("start-connection", this.id);
+      if (!this.activeConnector) {
+        this.$emit("start-connection", this.id);
+      } else {
+        this.$emit("cancel-connection");
+      }
     },
     emitFinishConnection() {
       this.$emit("finish-connection", this.id);
-      console.log("finish conn");
     },
 
     // drag-move functions
@@ -89,13 +88,6 @@ export default defineComponent({
       >
         route
       </span>
-      <span
-        class="material-icons top-bar-icon"
-        :class="{ 'active-top-bar-icon': showResizers }"
-        @click="onClickResize"
-      >
-        aspect_ratio
-      </span>
       <span class="material-icons top-bar-icon" @click="emitRemoveNote">
         cancel
       </span>
@@ -110,7 +102,7 @@ export default defineComponent({
     ></textarea>
 
     <ObjectResizers
-      :showResizers="showResizers"
+      :showResizers="showTopBar"
       :activePosition="activeResizePosition"
       v-on:start-drag-resize="emitStartDragResize"
       v-on:stop-drag-resize="emitStopDragResize"

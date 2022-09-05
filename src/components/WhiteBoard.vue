@@ -110,7 +110,7 @@ export default defineComponent({
       if (this.currentConnected === undefined) return;
       this.currentConnected.activeConnector = true;
 
-      // start connection from start object to cursor position
+      // start connection from start object to cursor
       this.connections.push({
         id: -1,
         obj1: this.currentConnected,
@@ -131,11 +131,17 @@ export default defineComponent({
         return;
       }
 
+      // add new connection
       this.connections.push({
         id: this.currentId++,
         obj1: this.currentConnected,
         obj2: connectionEnd,
       });
+
+      this.cancelConnection();
+    },
+    cancelConnection() {
+      if (this.currentConnected === undefined) return;
 
       // reset start connection and active connector effect
       this.currentConnected.activeConnector = false;
@@ -335,7 +341,11 @@ export default defineComponent({
     <p class="board-name">{{ boardName }}</p>
   </header>
 
-  <section class="board" @mousemove.prevent="onMouseMove">
+  <section
+    class="board"
+    @mousemove.prevent="onMouseMove"
+    @keydown.esc="cancelConnection"
+  >
     <StickyNote
       v-for="note in stickyNotes"
       :key="note.id"
@@ -354,6 +364,7 @@ export default defineComponent({
       v-on:stop-drag-resize="stopDragResize"
       v-on:start-connection="startConnection"
       v-on:finish-connection="finishConnection"
+      v-on:cancel-connection="cancelConnection"
     />
 
     <StickyEmoji
