@@ -37,6 +37,8 @@ export default defineComponent({
 
     // connection functions
     emitStartConnection() {
+      console.log("start conn");
+
       if (!this.activeConnector) {
         this.$emit("start-connection", this.id);
       } else {
@@ -44,6 +46,7 @@ export default defineComponent({
       }
     },
     emitFinishConnection() {
+      console.log("finish conn");
       this.$emit("finish-connection", this.id);
     },
     emitMouseOver() {
@@ -94,7 +97,7 @@ export default defineComponent({
       <span
         class="material-icons top-bar-icon"
         :class="{ 'active-top-bar-icon': activeConnector }"
-        @click="emitStartConnection"
+        @click.stop="emitStartConnection"
       >
         route
       </span>

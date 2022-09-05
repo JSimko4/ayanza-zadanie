@@ -5,7 +5,7 @@ import type Note from "@/contracts/Note";
 import type Emoji from "@/contracts/Emoji";
 import type Connection from "@/contracts/Connection";
 import StickyEmoji from "./StickyEmoji.vue";
-import ObjectConnection from "./ObjectConnection.vue";
+import ObjectConnection from "./ObjectConnection/ObjectConnection.vue";
 import type Cursor from "@/contracts/Cursor";
 
 export default defineComponent({
@@ -128,12 +128,7 @@ export default defineComponent({
         (element: Note) => element.id === id
       );
 
-      if (
-        tempConnection === undefined ||
-        newEnd === undefined ||
-        newEnd.id === tempConnection.obj1.id
-      )
-        return;
+      if (tempConnection === undefined || newEnd === undefined) return;
 
       tempConnection.obj2 = newEnd;
     },
@@ -151,11 +146,6 @@ export default defineComponent({
       );
 
       if (this.currentConnected === undefined || connectionEnd === undefined) {
-        return;
-      }
-
-      // cant connect to itself
-      if (this.currentConnected.id === connectionEnd.id) {
         return;
       }
 
