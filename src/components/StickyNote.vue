@@ -1,9 +1,11 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, type PropType } from "vue";
 import ObjectResizers from "./ObjectResizers.vue";
+import type Note from "@/contracts/Note";
 
 export default defineComponent({
   props: {
+    // note: Object as PropType<Note>, later --> refactor
     id: Number,
     currentWidth: Number,
     currentHeight: Number,
@@ -44,6 +46,12 @@ export default defineComponent({
     emitFinishConnection() {
       this.$emit("finish-connection", this.id);
     },
+    emitMouseOver() {
+      this.$emit("mouse-over", this.id);
+    },
+    emitMouseLeave() {
+      this.$emit("mouse-leave", this.id);
+    },
 
     // drag-move functions
     emitStartDrag(event: any) {
@@ -72,6 +80,8 @@ export default defineComponent({
     @click="emitFinishConnection"
     @focus="focusNote"
     @focusout="focuOutNote"
+    @mouseover="emitMouseOver"
+    @mouseleave="emitMouseLeave"
     tabindex="0"
     class="note"
   >

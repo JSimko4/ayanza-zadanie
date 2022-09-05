@@ -31,8 +31,9 @@ export default defineComponent({
         currentWidth: 3,
         currentHeight: 3,
       } as Cursor,
+      temporaryEndOfLine: {} as Note | Cursor,
 
-      emojiCodes: ["😍", "👍", "👎", "😭", "😕", "😐", "😊"],
+      emojiCodes: ["😍", "👍", "👎", "😭", "😕", "😐", "😉"],
       colorCodes: ["#fdddef", "#e3d7fb", "#cff4e8", "#fff7cf"],
     };
   },
@@ -111,11 +112,38 @@ export default defineComponent({
       this.currentConnected.activeConnector = true;
 
       // start connection from start object to cursor
+      this.setTemporaryEndToCursor();
       this.connections.push({
         id: -1,
         obj1: this.currentConnected,
-        obj2: this.cursor,
+        obj2: this.temporaryEndOfLine,
       });
+    },
+    setTemporaryEnd(id: number) {
+      const tempConnection = this.connections.find(
+        (element: Connection) => element.id === -1
+      );
+
+      const newEnd = this.stickyNotes.find(
+        (element: Note) => element.id === id
+      );
+
+      if (
+        tempConnection === undefined ||
+        newEnd === undefined ||
+        newEnd.id === tempConnection.obj1.id
+      )
+        return;
+
+      tempConnection.obj2 = newEnd;
+    },
+    setTemporaryEndToCursor() {
+      const tempConnection = this.connections.find(
+        (element: Connection) => element.id === -1
+      );
+
+      if (tempConnection === undefined) return;
+      tempConnection.obj2 = this.cursor;
     },
     finishConnection(id: number) {
       const connectionEnd = this.stickyNotes.find(
@@ -349,6 +377,7 @@ export default defineComponent({
     <StickyNote
       v-for="note in stickyNotes"
       :key="note.id"
+      :x="note"
       :id="note.id"
       :color="note.color"
       :currentHeight="note.currentHeight"
@@ -365,6 +394,8 @@ export default defineComponent({
       v-on:start-connection="startConnection"
       v-on:finish-connection="finishConnection"
       v-on:cancel-connection="cancelConnection"
+      v-on:mouse-over="setTemporaryEnd"
+      v-on:mouse-leave="setTemporaryEndToCursor"
     />
 
     <StickyEmoji
@@ -395,8 +426,23 @@ export default defineComponent({
   </section>
 
   <footer class="buttons-container">
-    <span class="material-icons button" @click="addStickyNote">note_add</span>
-    <span class="button" @click="addEmoji">{{ emojiCodes[0] }}</span>
+    <span
+      class="material-icons button-right-divider button"
+      @click="addStickyNote"
+    >
+      note_add
+    </span>
+    <span
+      class="button"
+      style="width: 41px; height: 24px; box-sizing: border-box"
+      @click="addEmoji"
+    >
+      {{ emojiCodes[0] }}
+    </span>
+
+    <!-- 
+    <span class="material-icons button" @click="addEmoji">emoji_emotions</span>
+        -->
   </footer>
 </template>
 
@@ -422,15 +468,26 @@ export default defineComponent({
 .buttons-container {
   position: absolute;
   bottom: 15px;
-  width: 100%;
+  width: 85;
+  left: calc(50% - 42.5px);
 
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+
+  background: white;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  border-radius: 10px;
 }
 
 .button {
+  padding: 0px 7.5px;
   cursor: pointer;
+}
+
+.button-right-divider {
+  border-right: 2px solid rgba(128, 128, 128, 0.3);
 }
 </style>
