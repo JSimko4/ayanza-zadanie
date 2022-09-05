@@ -19,6 +19,7 @@ export default defineComponent({
 
       currentDragged: undefined as Note | Emoji | undefined,
       currentResized: undefined as Note | Emoji | undefined,
+      currentConnected: undefined as Note | undefined,
 
       emojiCodes: ["😍", "👍", "👎", "😭", "😕", "😐", "😊"],
       colorCodes: ["#fdddef", "#e3d7fb", "#cff4e8", "#fff7cf"],
@@ -38,6 +39,7 @@ export default defineComponent({
         currentHeight: 200,
         currentWidth: 200,
         activeResizePosition: "",
+        activeConnector: false,
       });
     },
     addEmoji() {
@@ -54,24 +56,26 @@ export default defineComponent({
         activeResizePosition: "",
       });
     },
-    addConnection() {
-      const obj1 = this.stickyNotes[0];
-      const obj2 = this.stickyNotes[1];
-
-      this.connections.push({
-        id: this.currentId++,
-        obj1: obj1,
-        obj2: obj2,
-      });
-    },
     removeNote(id: number) {
       this.stickyNotes = this.stickyNotes.filter(function (e: Note) {
         return e.id !== id;
       });
+
+      this.removeConnectionByObjectsId(id);
     },
     removeEmoji(id: number) {
       this.emojis = this.emojis.filter(function (e: Emoji) {
         return e.id !== id;
+      });
+    },
+    removeConnectionByConnectionId(id: number) {
+      this.connections = this.connections.filter(function (e: Connection) {
+        return e.id !== id;
+      });
+    },
+    removeConnectionByObjectsId(id: number) {
+      this.connections = this.connections.filter(function (e: Connection) {
+        return e.obj1.id !== id && e.obj2.id !== id;
       });
     },
 
@@ -81,6 +85,66 @@ export default defineComponent({
       } else if (this.currentResized !== undefined) {
         this.onDragResize(event);
       }
+    },
+
+    // connect board objects
+    startConnection(id: number) {
+      this.currentConnected = this.stickyNotes.find(
+        (element: Note) => element.id === id
+      );
+
+      if (this.currentConnected === undefined) return;
+
+      this.currentConnected.activeConnector = true;
+
+      /*
+      TO DO.. board object -> cursor animation
+      const cursor = {
+        id: 0,
+        color: "",
+        cursorInitialX: 0,
+        cursorInitialY: 0,
+        currentX: 50,
+        currentY: 50,
+        currentHeight: 200,
+        currentWidth: 200,
+        activeResizePosition: "",
+      };
+
+      // start connection from start object to cursor position
+      this.connections.push({
+        id: -1,
+        obj1: this.currentConnected,
+        obj2: cursor,
+      });
+      */
+    },
+    finishConnection(id: number) {
+      const connectionEnd = this.stickyNotes.find(
+        (element: Note) => element.id === id
+      );
+
+      if (this.currentConnected === undefined || connectionEnd === undefined) {
+        return;
+      }
+
+      // cant connect to itself
+      if (this.currentConnected.id === connectionEnd.id) {
+        return;
+      }
+
+      this.connections.push({
+        id: this.currentId++,
+        obj1: this.currentConnected,
+        obj2: connectionEnd,
+      });
+
+      // reset start connection and active connector effect
+      this.currentConnected.activeConnector = false;
+      this.currentConnected = undefined;
+
+      // remove object to cursor connection (animation)
+      this.removeConnectionByConnectionId(-1);
     },
 
     // drag-move board objects
@@ -284,11 +348,14 @@ export default defineComponent({
       :currentX="note.currentX"
       :currentY="note.currentY"
       :activeResizePosition="note.activeResizePosition"
+      :activeConnector="note.activeConnector"
       v-on:remove-note="removeNote"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
       v-on:start-drag-resize="startDragResize"
       v-on:stop-drag-resize="stopDragResize"
+      v-on:start-connection="startConnection"
+      v-on:finish-connection="finishConnection"
     />
 
     <StickyEmoji
@@ -308,18 +375,19 @@ export default defineComponent({
       v-on:stop-drag-resize="stopDragResize"
     />
 
-    <ObjectConnection
-      v-for="connection in connections"
-      :key="connection.id"
-      :obj1="connection.obj1"
-      :obj2="connection.obj2"
-    />
+    <svg width="100%" height="100%" style="z-index: -1">
+      <ObjectConnection
+        v-for="connection in connections"
+        :key="connection.id"
+        :obj1="connection.obj1"
+        :obj2="connection.obj2"
+      />
+    </svg>
   </section>
 
   <footer class="buttons-container">
     <span class="material-icons button" @click="addStickyNote">note_add</span>
     <span class="button" @click="addEmoji">{{ emojiCodes[0] }}</span>
-    <span class="material-icons button" @click="addConnection">route</span>
   </footer>
 </template>
 

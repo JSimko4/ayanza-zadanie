@@ -10,4 +10,5 @@ export default interface Note {
   currentHeight: number;
 
   activeResizePosition: string;
+  activeConnector: boolean;
 }

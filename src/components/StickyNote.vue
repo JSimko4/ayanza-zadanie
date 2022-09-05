@@ -11,6 +11,7 @@ export default defineComponent({
     currentY: Number,
     color: String,
     activeResizePosition: String,
+    activeConnector: Boolean,
   },
   data() {
     return {
@@ -34,6 +35,15 @@ export default defineComponent({
     },
     emitStopDragResize() {
       this.$emit("stop-drag-resize");
+    },
+
+    // connection functions
+    emitStartConnection() {
+      this.$emit("start-connection", this.id);
+    },
+    emitFinishConnection() {
+      this.$emit("finish-connection", this.id);
+      console.log("finish conn");
     },
 
     // drag-move functions
@@ -68,6 +78,13 @@ export default defineComponent({
     >
       <span
         class="material-icons top-bar-icon"
+        :class="{ 'active-top-bar-icon': activeConnector }"
+        @click="emitStartConnection"
+      >
+        route
+      </span>
+      <span
+        class="material-icons top-bar-icon"
         :class="{ 'active-top-bar-icon': showResizers }"
         @click="onClickResize"
       >
@@ -83,6 +100,7 @@ export default defineComponent({
       class="note-input"
       @focus="focusNote"
       @focusout="focuOutNote"
+      @click="emitFinishConnection"
     ></textarea>
 
     <ObjectResizers
@@ -144,7 +162,7 @@ export default defineComponent({
   width: calc(100% - 20px);
   height: 100%;
   resize: none;
-  margin: 8px;
+  padding: 8px;
 }
 
 /* text-area scroll styling */

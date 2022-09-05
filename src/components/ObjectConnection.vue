@@ -96,30 +96,28 @@ export default defineComponent({
 </script>
 
 <template>
-  <svg width="100%" height="100%" style="z-index: -1">
-    <defs>
-      <marker
-        id="arrow"
-        markerWidth="10"
-        markerHeight="10"
-        refX="8"
-        refY="3"
-        orient="auto"
-        markerUnits="strokeWidth"
-      >
-        <path d="M0,0 L0,6 L9,3 z" />
-      </marker>
-    </defs>
-    <line
-      @click="debug"
-      :x1="getShortestDistancePoints[0].x"
-      :y1="getShortestDistancePoints[0].y"
-      :x2="getShortestDistancePoints[1].x"
-      :y2="getShortestDistancePoints[1].y"
-      style="stroke: black; stroke-width: 1.25"
-      marker-end="url(#arrow)"
-    />
-  </svg>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="8"
+      refY="3"
+      orient="auto"
+      markerUnits="strokeWidth"
+    >
+      <path d="M0,0 L0,6 L9,3 z" />
+    </marker>
+  </defs>
+  <line
+    @click="debug"
+    :x1="getShortestDistancePoints[0].x"
+    :y1="getShortestDistancePoints[0].y"
+    :x2="getShortestDistancePoints[1].x"
+    :y2="getShortestDistancePoints[1].y"
+    style="stroke: black; stroke-width: 1.25"
+    marker-end="url(#arrow)"
+  />
 </template>
 
 <style scoped></style>
