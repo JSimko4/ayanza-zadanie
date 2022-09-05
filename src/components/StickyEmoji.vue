@@ -15,6 +15,7 @@ export default defineComponent({
   data() {
     return {
       showTopBar: false,
+      showResizers: false,
       zIndex: 0,
     };
   },
@@ -36,6 +37,9 @@ export default defineComponent({
     },
 
     // resize functions
+    onClickResize() {
+      this.showResizers = this.showResizers ? false : true;
+    },
     emitStartDragResize(event: any, position: string) {
       this.$emit("start-drag-resize", event, this.id, position);
     },
@@ -74,6 +78,13 @@ export default defineComponent({
     tabindex="0"
   >
     <section class="top-bar" v-show="showTopBar">
+      <span
+        class="material-icons top-bar-icon"
+        :class="{ 'active-top-bar-icon': showResizers }"
+        @click="onClickResize"
+      >
+        aspect_ratio
+      </span>
       <span class="material-icons top-bar-icon" @click="emitRemoveEmoji">
         cancel
       </span>
@@ -87,7 +98,7 @@ export default defineComponent({
     >
 
     <ObjectResizers
-      :showResizers="showTopBar"
+      :showResizers="showResizers"
       :activePosition="activeResizePosition"
       v-on:start-drag-resize="emitStartDragResize"
       v-on:stop-drag-resize="emitStopDragResize"
