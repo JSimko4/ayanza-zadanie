@@ -21,11 +21,11 @@ export default defineComponent({
     };
   },
   methods: {
-    // remove
     emitRemoveNote() {
       this.$emit("remove-note", this.id);
     },
-    // resize
+
+    // resize functions
     onClickResize() {
       this.showResizers = this.showResizers ? false : true;
     },
@@ -35,14 +35,16 @@ export default defineComponent({
     emitStopDragResize() {
       this.$emit("stop-drag-resize");
     },
-    // drag-move
+
+    // drag-move functions
     emitStartDrag(event: any) {
       this.$emit("start-drag", event, this.id);
     },
     emitStopDrag() {
       this.$emit("stop-drag");
     },
-    // focus - show top bar
+
+    // show top bar functions
     focusNote() {
       this.showTopBar = true;
       this.zIndex = 10;
@@ -132,7 +134,7 @@ export default defineComponent({
 }
 
 .active-top-bar-icon {
-  color: #8132fc;
+  color: #6a9ef7;
 }
 
 .note-input {
@@ -151,6 +153,7 @@ textarea::-webkit-scrollbar {
 }
 
 textarea::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 

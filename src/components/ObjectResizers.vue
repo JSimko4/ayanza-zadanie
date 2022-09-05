@@ -53,7 +53,8 @@ export default defineComponent({
   width: 8px;
   height: 8px;
   z-index: 50;
-  border: 2px solid #8132fc;
+  border: 2px solid #6a9ef7;
+  border-radius: 50%;
   background: white;
 }
 
@@ -62,7 +63,7 @@ export default defineComponent({
 }
 
 .active-resizer {
-  background: #8132fc;
+  background: #6a9ef7;
 }
 
 .resizer-top-left {

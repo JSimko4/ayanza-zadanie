@@ -3,7 +3,9 @@ import { defineComponent } from "vue";
 import StickyNote from "./StickyNote.vue";
 import type Note from "@/contracts/Note";
 import type Emoji from "@/contracts/Emoji";
+import type Connection from "@/contracts/Connection";
 import StickyEmoji from "./StickyEmoji.vue";
+import ObjectConnection from "./ObjectConnection.vue";
 
 export default defineComponent({
   props: {
@@ -13,6 +15,8 @@ export default defineComponent({
     return {
       stickyNotes: [] as Note[],
       emojis: [] as Emoji[],
+      connections: [] as Connection[],
+
       currentDragged: undefined as Note | Emoji | undefined,
       currentResized: undefined as Note | Emoji | undefined,
 
@@ -45,9 +49,19 @@ export default defineComponent({
         cursorInitialY: 0,
         currentX: 50,
         currentY: 50,
-        currentHeight: 100,
-        currentWidth: 100,
+        currentHeight: 40,
+        currentWidth: 40,
         activeResizePosition: "",
+      });
+    },
+    addConnection() {
+      const obj1 = this.stickyNotes[0];
+      const obj2 = this.stickyNotes[1];
+
+      this.connections.push({
+        id: this.currentId++,
+        obj1: obj1,
+        obj2: obj2,
       });
     },
     removeNote(id: number) {
@@ -113,24 +127,6 @@ export default defineComponent({
     },
 
     // drag-resize board objects
-    startDragResize(event: any, id: number, position: string) {
-      // concat object arrays
-      const combinedArr: (Note | Emoji)[] = [
-        ...this.stickyNotes,
-        ...this.emojis,
-      ];
-
-      // find specific board object by id
-      this.currentResized = combinedArr.find(
-        (element: Note | Emoji) => element.id === id
-      );
-
-      if (this.currentResized !== undefined) {
-        this.currentResized.activeResizePosition = position;
-        this.currentResized.cursorInitialX = event.clientX;
-        this.currentResized.cursorInitialY = event.clientY;
-      }
-    },
     updateResizedObject(
       minWidth: number,
       minHeight: number,
@@ -164,6 +160,24 @@ export default defineComponent({
         if (newWidth < minWidth || newHeight < minHeight) {
           this.stopDragResize();
         }
+      }
+    },
+    startDragResize(event: any, id: number, position: string) {
+      // concat object arrays
+      const combinedArr: (Note | Emoji)[] = [
+        ...this.stickyNotes,
+        ...this.emojis,
+      ];
+
+      // find specific board object by id
+      this.currentResized = combinedArr.find(
+        (element: Note | Emoji) => element.id === id
+      );
+
+      if (this.currentResized !== undefined) {
+        this.currentResized.activeResizePosition = position;
+        this.currentResized.cursorInitialX = event.clientX;
+        this.currentResized.cursorInitialY = event.clientY;
       }
     },
     onDragResize(event: any) {
@@ -228,8 +242,8 @@ export default defineComponent({
 
         // set min dimensions (emoji)
         if ("emoji" in this.currentResized) {
-          minHeight = 30;
-          minWidth = 30;
+          minHeight = 35;
+          minWidth = 35;
         }
 
         // update object dimensions
@@ -250,7 +264,7 @@ export default defineComponent({
       }
     },
   },
-  components: { StickyNote, StickyEmoji },
+  components: { StickyNote, StickyEmoji, ObjectConnection },
 });
 </script>
 
@@ -293,11 +307,19 @@ export default defineComponent({
       v-on:start-drag-resize="startDragResize"
       v-on:stop-drag-resize="stopDragResize"
     />
+
+    <ObjectConnection
+      v-for="connection in connections"
+      :key="connection.id"
+      :obj1="connection.obj1"
+      :obj2="connection.obj2"
+    />
   </section>
 
   <footer class="buttons-container">
     <span class="material-icons button" @click="addStickyNote">note_add</span>
     <span class="button" @click="addEmoji">{{ emojiCodes[0] }}</span>
+    <span class="material-icons button" @click="addConnection">route</span>
   </footer>
 </template>
 

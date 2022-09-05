@@ -35,7 +35,8 @@ export default defineComponent({
     emitRemoveEmoji() {
       this.$emit("remove-emoji", this.id);
     },
-    // resize
+
+    // resize functions
     onClickResize() {
       this.showResizers = this.showResizers ? false : true;
     },
@@ -45,6 +46,8 @@ export default defineComponent({
     emitStopDragResize() {
       this.$emit("stop-drag-resize");
     },
+
+    // drag-move functions
     emitStartDrag(event: any) {
       this.$emit("start-drag", event, this.id);
       this.zIndex = 10;
@@ -52,6 +55,8 @@ export default defineComponent({
     emitStopDrag() {
       this.$emit("stop-drag");
     },
+
+    // show top bar functions
     focusEmoji() {
       this.showTopBar = true;
       this.zIndex = 10;
@@ -141,6 +146,6 @@ export default defineComponent({
 }
 
 .active-top-bar-icon {
-  color: #8132fc;
+  color: #6a9ef7;
 }
 </style>
