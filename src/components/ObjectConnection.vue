@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import type Note from "@/contracts/Note";
+import type Cursor from "@/contracts/Cursor";
 
 interface Point {
   x: number;
@@ -10,7 +11,7 @@ interface Point {
 export default defineComponent({
   props: {
     obj1: Object as () => Note,
-    obj2: Object as () => Note,
+    obj2: Object as () => Note | Cursor,
   },
   computed: {
     getShortestDistancePoints() {
@@ -49,7 +50,7 @@ export default defineComponent({
     },
   },
   methods: {
-    getPoints(boardObject: Note, topBarOffset: number) {
+    getPoints(boardObject: Note | Cursor, topBarOffset: number) {
       const points: Point[] = [];
       const pointOffset = 5;
 
@@ -88,9 +89,6 @@ export default defineComponent({
       const b = y1 - y2;
       return Math.sqrt(a * a + b * b);
     },
-    debug() {
-      console.log("test");
-    },
   },
 });
 </script>
@@ -110,7 +108,6 @@ export default defineComponent({
     </marker>
   </defs>
   <line
-    @click="debug"
     :x1="getShortestDistancePoints[0].x"
     :y1="getShortestDistancePoints[0].y"
     :x2="getShortestDistancePoints[1].x"

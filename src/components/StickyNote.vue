@@ -69,7 +69,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <div @focus="focusNote" @focusout="focuOutNote" tabindex="0" class="note">
+  <div
+    @click="emitFinishConnection"
+    @focus="focusNote"
+    @focusout="focuOutNote"
+    tabindex="0"
+    class="note"
+  >
     <section
       v-show="showTopBar"
       class="top-bar"

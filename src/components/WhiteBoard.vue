@@ -6,6 +6,7 @@ import type Emoji from "@/contracts/Emoji";
 import type Connection from "@/contracts/Connection";
 import StickyEmoji from "./StickyEmoji.vue";
 import ObjectConnection from "./ObjectConnection.vue";
+import type Cursor from "@/contracts/Cursor";
 
 export default defineComponent({
   props: {
@@ -13,6 +14,8 @@ export default defineComponent({
   },
   data() {
     return {
+      currentId: 0,
+
       stickyNotes: [] as Note[],
       emojis: [] as Emoji[],
       connections: [] as Connection[],
@@ -21,9 +24,16 @@ export default defineComponent({
       currentResized: undefined as Note | Emoji | undefined,
       currentConnected: undefined as Note | undefined,
 
+      cursor: {
+        id: -1,
+        currentX: 0,
+        currentY: 0,
+        currentWidth: 3,
+        currentHeight: 3,
+      } as Cursor,
+
       emojiCodes: ["😍", "👍", "👎", "😭", "😕", "😐", "😊"],
       colorCodes: ["#fdddef", "#e3d7fb", "#cff4e8", "#fff7cf"],
-      currentId: 0,
     };
   },
   methods: {
@@ -80,6 +90,10 @@ export default defineComponent({
     },
 
     onMouseMove(event: any) {
+      // update cursor positions
+      this.cursor.currentX = event.clientX;
+      this.cursor.currentY = event.clientY;
+
       if (this.currentDragged !== undefined) {
         this.onDrag(event);
       } else if (this.currentResized !== undefined) {
@@ -94,30 +108,14 @@ export default defineComponent({
       );
 
       if (this.currentConnected === undefined) return;
-
       this.currentConnected.activeConnector = true;
-
-      /*
-      TO DO.. board object -> cursor animation
-      const cursor = {
-        id: 0,
-        color: "",
-        cursorInitialX: 0,
-        cursorInitialY: 0,
-        currentX: 50,
-        currentY: 50,
-        currentHeight: 200,
-        currentWidth: 200,
-        activeResizePosition: "",
-      };
 
       // start connection from start object to cursor position
       this.connections.push({
         id: -1,
         obj1: this.currentConnected,
-        obj2: cursor,
+        obj2: this.cursor,
       });
-      */
     },
     finishConnection(id: number) {
       const connectionEnd = this.stickyNotes.find(
@@ -375,7 +373,7 @@ export default defineComponent({
       v-on:stop-drag-resize="stopDragResize"
     />
 
-    <svg width="100%" height="100%" style="z-index: -1">
+    <svg width="100%" height="100%">
       <ObjectConnection
         v-for="connection in connections"
         :key="connection.id"
