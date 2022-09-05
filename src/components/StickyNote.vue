@@ -117,6 +117,8 @@ export default defineComponent({
     <ObjectResizers
       :showResizers="showTopBar"
       :activePosition="activeResizePosition"
+      :objectHeight="currentHeight"
+      :objectWidth="currentWidth"
       v-on:start-drag-resize="emitStartDragResize"
       v-on:stop-drag-resize="emitStopDragResize"
     />
