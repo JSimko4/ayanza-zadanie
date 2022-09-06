@@ -7,6 +7,7 @@ import type Connection from "@/contracts/Connection";
 import StickyEmoji from "./StickyEmoji.vue";
 import ObjectConnection from "./ObjectConnection/ObjectConnection.vue";
 import type Cursor from "@/contracts/Cursor";
+import FloatingDialog from "./FloatingDialog.vue";
 
 export default defineComponent({
   props: {
@@ -24,6 +25,7 @@ export default defineComponent({
       currentResized: undefined as Note | Emoji | undefined,
       currentConnected: undefined as Note | undefined,
 
+      temporaryEndOfLine: {} as Note | Cursor,
       cursor: {
         id: -1,
         currentX: 0,
@@ -31,18 +33,32 @@ export default defineComponent({
         currentWidth: 3,
         currentHeight: 3,
       } as Cursor,
-      temporaryEndOfLine: {} as Note | Cursor,
 
-      emojiCodes: ["😍", "👍", "👎", "😭", "😕", "😐", "😉"],
+      emojiCodes: [
+        "😍",
+        "😄",
+        "👍",
+        "🙋",
+        "🐢",
+        "🐳",
+        "🐼",
+        "🐶",
+        "🐱",
+        "🙈",
+        "🙉",
+        "🙊",
+      ],
       colorCodes: ["#fdddef", "#e3d7fb", "#cff4e8", "#fff7cf"],
+
+      showPickNotesDialog: false,
+      showPickEmojisDialog: false,
     };
   },
   methods: {
-    addStickyNote() {
+    addStickyNote(color: string) {
       this.stickyNotes.push({
         id: this.currentId++,
-        color:
-          this.colorCodes[Math.floor(Math.random() * this.colorCodes.length)],
+        color: color,
         cursorInitialX: 0,
         cursorInitialY: 0,
         currentX: 50,
@@ -53,11 +69,10 @@ export default defineComponent({
         activeConnector: false,
       });
     },
-    addEmoji() {
+    addEmoji(emoji: string) {
       this.emojis.push({
         id: this.currentId++,
-        emoji:
-          this.emojiCodes[Math.floor(Math.random() * this.colorCodes.length)],
+        emoji: emoji,
         cursorInitialX: 0,
         cursorInitialY: 0,
         currentX: 50,
@@ -368,8 +383,12 @@ export default defineComponent({
         this.currentResized = undefined;
       }
     },
+    closeDialogs() {
+      this.showPickNotesDialog = false;
+      this.showPickEmojisDialog = false;
+    },
   },
-  components: { StickyNote, StickyEmoji, ObjectConnection },
+  components: { StickyNote, StickyEmoji, ObjectConnection, FloatingDialog },
 });
 </script>
 
@@ -433,17 +452,48 @@ export default defineComponent({
     </svg>
   </section>
 
+  <FloatingDialog :showDialog="showPickNotesDialog" @click="closeDialogs">
+    <template v-slot:header>
+      <h3>Choose note color</h3>
+    </template>
+    <template v-slot:body>
+      <div
+        class="dialog-element dialog-note"
+        v-for="color in colorCodes"
+        :key="color"
+        @click="addStickyNote(color)"
+        :style="{ background: color }"
+      ></div>
+    </template>
+  </FloatingDialog>
+
+  <FloatingDialog :showDialog="showPickEmojisDialog" @click="closeDialogs">
+    <template v-slot:header>
+      <h3>Choose new emoji</h3>
+    </template>
+    <template v-slot:body>
+      <div
+        class="dialog-element dialog-emoji"
+        v-for="emoji in emojiCodes"
+        :key="emoji"
+        @click="addEmoji(emoji)"
+      >
+        <span>{{ emoji }}</span>
+      </div>
+    </template>
+  </FloatingDialog>
+
   <footer class="buttons-container">
     <span
       class="material-icons button-right-divider button"
-      @click="addStickyNote"
+      @click="showPickNotesDialog = true"
     >
       note_add
     </span>
     <span
       class="button"
       style="width: 41px; height: 24px; box-sizing: border-box"
-      @click="addEmoji"
+      @click="showPickEmojisDialog = true"
     >
       {{ emojiCodes[0] }}
     </span>
@@ -455,6 +505,29 @@ export default defineComponent({
 </template>
 
 <style>
+.dialog-note {
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.33);
+}
+
+.dialog-emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  padding: 5px;
+}
+
+.dialog-element {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.dialog-element:hover {
+  transform: scale(1.3);
+}
+
 .board-header {
   display: flex;
   align-items: center;
