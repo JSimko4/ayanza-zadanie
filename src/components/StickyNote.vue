@@ -5,15 +5,7 @@ import type Note from "@/contracts/Note";
 
 export default defineComponent({
   props: {
-    // note: Object as PropType<Note>, later --> refactor
-    id: Number,
-    currentWidth: Number,
-    currentHeight: Number,
-    currentX: Number,
-    currentY: Number,
-    color: String,
-    activeResizePosition: String,
-    activeConnector: Boolean,
+    note: { type: Object as PropType<Note>, required: true },
     currentMaxZIndex: { type: Number, required: true },
   },
   data() {
@@ -23,37 +15,54 @@ export default defineComponent({
       zIndex: this.currentMaxZIndex,
     };
   },
+  computed: {
+    noteXPx() {
+      return this.note.currentX + "px";
+    },
+    noteYPx() {
+      return this.note.currentY + "px";
+    },
+    noteWidthPx() {
+      return this.note.currentWidth + "px";
+    },
+    noteHeightPx() {
+      return this.note.currentHeight + "px";
+    },
+    noteColor() {
+      return this.note.color;
+    },
+  },
   methods: {
     emitRemoveNote() {
-      this.$emit("remove-note", this.id);
+      this.$emit("remove-note", this.note.id);
     },
 
     // resize functions
     emitStartDragResize(event: any, position: string) {
-      this.$emit("start-drag-resize", event, this.id, position);
+      this.$emit("start-drag-resize", event, this.note.id, position);
     },
 
     // connection functions
     emitStartConnection() {
-      if (!this.activeConnector) {
-        this.$emit("start-connection", this.id);
+      if (!this.note.activeConnector) {
+        this.$emit("start-connection", this.note.id);
       } else {
         this.$emit("cancel-connection");
       }
     },
     emitFinishConnection() {
-      this.$emit("finish-connection", this.id);
+      this.$emit("finish-connection", this.note.id);
     },
     emitMouseOver() {
-      this.$emit("mouse-over", this.id);
+      this.$emit("mouse-over", this.note.id);
     },
     emitMouseLeave() {
-      this.$emit("mouse-leave", this.id);
+      this.$emit("mouse-leave", this.note.id);
     },
 
     // drag-move functions
     emitStartDrag(event: any) {
-      this.$emit("start-drag", event, this.id);
+      this.$emit("start-drag", event, this.note.id);
     },
     emitStopDrag() {
       this.$emit("stop-drag");
@@ -91,7 +100,7 @@ export default defineComponent({
     >
       <span
         class="material-icons top-bar-icon"
-        :class="{ 'active-top-bar-icon': activeConnector }"
+        :class="{ 'active-top-bar-icon': note.activeConnector }"
         @click.stop="emitStartConnection"
       >
         route
@@ -111,7 +120,7 @@ export default defineComponent({
 
     <ObjectResizers
       :showResizers="showTopBar"
-      :activePosition="activeResizePosition"
+      :activePosition="note.activeResizePosition"
       v-on:start-drag-resize="emitStartDragResize"
     />
   </div>
@@ -120,19 +129,19 @@ export default defineComponent({
 <style scoped>
 .note {
   position: absolute;
-  left: v-bind(currentX + "px");
-  top: v-bind(currentY + "px");
-  width: v-bind(currentWidth + "px");
-  height: v-bind(currentHeight + "px");
-  z-index: v-bind(zIndex);
+  left: v-bind(noteXPx);
+  top: v-bind(noteYPx);
+  width: v-bind(noteWidthPx);
+  height: v-bind(noteHeightPx);
+  background-color: v-bind(noteColor);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  background-color: v-bind(color);
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  z-index: v-bind(zIndex);
 }
 
 .top-bar {

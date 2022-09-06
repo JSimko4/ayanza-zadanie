@@ -353,13 +353,13 @@ export default defineComponent({
       }
     },
 
-    // utils
+    // closes currently opened dialog
     closeDialogs() {
       this.showPickNotesDialog = false;
       this.showPickEmojisDialog = false;
     },
+    // increments current max z-index (needed for last dragged object to be in front)
     incrementZIndex() {
-      // increment current max z-index (needed for last dragged object to be in front)
       this.currentMaxZIndex++;
     },
   },
@@ -381,16 +381,8 @@ export default defineComponent({
     <StickyNote
       v-for="note in stickyNotes"
       :key="note.id"
-      :x="note"
-      :id="note.id"
-      :color="note.color"
-      :currentHeight="note.currentHeight"
-      :currentWidth="note.currentWidth"
-      :currentX="note.currentX"
-      :currentY="note.currentY"
+      :note="note"
       :currentMaxZIndex="currentMaxZIndex"
-      :activeResizePosition="note.activeResizePosition"
-      :activeConnector="note.activeConnector"
       v-on:remove-note="removeNote"
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
