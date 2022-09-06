@@ -4,8 +4,8 @@
 
 Pri implementovaní riešenia som sa rozhodol použiť Vue.js 3 & Options API. V komponentoch som použil emitovanie akcií rodičovskému komponentu, pretože som sa od chalanov na pohovore dopočul, že nepoužívate VueX / Pinia.
 
-Mojim cieľom vrámci tohto zadania nebolo ho len zbúchať za čo najkratšiu dobu..
-Snažil som sa dosiahnuť čo najviac smooth & user friendly experience, či sa mi to podarilo nech už posúdi každý sám :D Budem rád za akýkoľvek feedback.
+Mojim cieľom vrámci tohto zadania nebolo ho len zbúchať za čo najkratšiu dobu.
+Snažil som sa dosiahnuť čo najviac smooth & user friendly experience, či sa mi to podarilo už posúdi každý sám 👨‍⚖️. Budem rád za akýkoľvek feedback.
 
 Celkovo mi zadanie zabralo na vypracovanie okolo 25 hodín.
 
@@ -33,8 +33,8 @@ Implementoval som:
 
 - vizualny prvok pre aktivny resizer
 - kontrolu prekročenia minimalnej velkosti daneho objektu (note/emoji) pre resizing
-  - Začal som trochu rozmýšľať nad tým ako by bolo najvhodnejšie implementovať connections medzi poznámkami. Došiel som k tomu, že najjednoduchšie bude keď použijem svg line + šipka na konci. Na viac som v daný deň nemal čas.
-  - Neskor som si ešte všimol, že v zadaní resizing nemal byť aj pre emojis ale ked som ho uz mal nakodeny tak prečo by nie :D
+- Začal som trochu rozmýšľať nad tým ako by bolo najvhodnejšie implementovať connections medzi poznámkami. Došiel som k tomu, že najjednoduchšie bude keď použijem svg line + šipka na konci. Na viac som v daný deň nemal čas.
+- Neskôr som si ešte všimol, že v zadaní resizing nemal byť aj pre emojis ale ked som ho uz mal nakodeny tak prečo by nie 😁
 
 ## 05.09.2022 [čas: 9h]
 
@@ -46,7 +46,7 @@ Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť
 - Ako ďalšie som implementoval to aby sa spojenie vymazalo ak sa vymaže jedna z poznámok a taktiež samotný spôsob ako sa bude spojenie vytvárať. Teda kliknem na ikonku spájania v poznámke -> začne sa vytváranie spojenia -> kliknem na druhu poznamku -> spojenie vytvorene.
 - User ale ešte nemal feedback na to ako vlastne to spojenie bude vyzerať ked ho vytváral, preto som pridal vizuálny prvok dočasného spojenia ktoré smeruje ku kurzoru. Neskôr v ten istý deň som k tomu pridal ešte vizualne zobrazenie pred dokončením spojenia pri hoveri nad poznamkou.
 - Potom som nakodil to aby používateľ mohol vypnúť vytváranie spojenia ak si to rozmyslel (klavesa ESC alebo opäť klikne na ikonku spájania).
-- Neskôr som pridal možnosť vytvoriť rekurzívne spojenie kedy ma poznamka connection sama na seba, neviem či by to niekto v živote použil ale chybalo mi to tam :D
+- Neskôr som pridal možnosť vytvoriť rekurzívne spojenie kedy ma poznamka connection sama na seba, neviem či by to niekto v živote použil ale chýbalo mi to tam 😁
 - Zakončil som to vytvorením základných štýlov pre horizontal / vertikálne menenie veľkosti, ktoré som chcel dokončiť na ďalší deň.
 
 ## 06.09.2022 [čas: 6h]
