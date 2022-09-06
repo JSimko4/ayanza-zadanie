@@ -2,7 +2,8 @@
 
 Pri implementovaní riešenia som sa rozhodol použiť **Vue.js 3** & **Options API**. V komponentoch som použil emitovanie akcií rodičovskému komponentu, pretože som sa od chalanov na pohovore dopočul, že nepoužívate VueX / Pinia.
 
-Mojim cieľom nebolo zadanie zbúchať za čo najkratšiu dobu ale dosiahnuť čo najviac smooth & user friendly experience s ktorým budem spokojný. To či sa mi to podarilo už posúdi každý sám 👨‍⚖️. Budem rád za akýkoľvek feedback.
+Mojim cieľom nebolo zadanie zbúchať za čo najkratšiu dobu ale dosiahnuť čo najviac smooth & user friendly experience. To či sa mi to podarilo už posúdi každý sám 👨‍⚖️.
+Budem veľmi rád za akýkoľvek feedback.
 
 Celkovo mi zadanie zabralo na vypracovanie okolo 25 hodín.
 
@@ -35,7 +36,7 @@ Implementoval som:
 
 Začal som trochu rozmýšľať nad tým ako by bolo najvhodnejšie implementovať connections medzi poznámkami. Po chvíľke som dospel k tomu, že najšikovnejšie bude keď použijem svg line so šipkou na konci.
 
-Neskôr som si ešte všimol, že v zadaní resizing nemal byť aj pre emojis ale ked som ho uz mal nakodeny tak prečo by nie 😁
+Neskôr som si ešte všimol, že v zadaní resizing nemal byť aj pre emojis ale keď som ho už mal nakódený tak prečo nie 😁
 
 ## 05.09.2022 [čas: 9h]
 
