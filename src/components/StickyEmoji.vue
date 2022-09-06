@@ -1,16 +1,11 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import type Emoji from "@/contracts/Emoji";
+import { defineComponent, type PropType } from "vue";
 import ObjectResizers from "./ObjectResizers.vue";
 
 export default defineComponent({
   props: {
-    id: Number,
-    currentWidth: Number,
-    currentHeight: Number,
-    currentX: Number,
-    currentY: Number,
-    emoji: String,
-    activeResizePosition: String,
+    emoji: { type: Object as PropType<Emoji>, required: true },
     currentMaxZIndex: { type: Number, required: true },
   },
   data() {
@@ -21,12 +16,27 @@ export default defineComponent({
     };
   },
   computed: {
+    emojiXPx() {
+      return this.emoji.currentX + "px";
+    },
+    emojiYPx() {
+      return this.emoji.currentY + "px";
+    },
+    emojiWidthPx() {
+      return this.emoji.currentWidth + "px";
+    },
+    emojiHeightPx() {
+      return this.emoji.currentHeight + "px";
+    },
     emojiSize() {
-      if (this.currentWidth !== undefined && this.currentHeight !== undefined) {
+      if (
+        this.emoji.currentWidth !== undefined &&
+        this.emoji.currentHeight !== undefined
+      ) {
         const smallerDimension =
-          this.currentHeight > this.currentWidth
-            ? this.currentWidth
-            : this.currentHeight;
+          this.emoji.currentHeight > this.emoji.currentWidth
+            ? this.emoji.currentWidth
+            : this.emoji.currentHeight;
         return smallerDimension / 1.25 + "px";
       }
       return "15px";
@@ -34,7 +44,7 @@ export default defineComponent({
   },
   methods: {
     emitRemoveEmoji() {
-      this.$emit("remove-emoji", this.id);
+      this.$emit("remove-emoji", this.emoji.id);
     },
 
     // resize functions
@@ -42,14 +52,14 @@ export default defineComponent({
       this.showResizers = this.showResizers ? false : true;
     },
     emitStartDragResize(event: any, position: string) {
-      this.$emit("start-drag-resize", event, this.id, position);
+      this.$emit("start-drag-resize", event, this.emoji.id, position);
     },
 
     // drag-move functions
     emitStartDrag(event: any) {
       this.zIndex = this.currentMaxZIndex + 1;
       this.$emit("increment-z-index");
-      this.$emit("start-drag", event, this.id);
+      this.$emit("start-drag", event, this.emoji.id);
     },
     emitStopDrag() {
       this.$emit("stop-drag");
@@ -91,12 +101,12 @@ export default defineComponent({
       @mouseup="emitStopDrag"
       class="emoji"
       tabindex="0"
-      >{{ emoji }}</span
+      >{{ emoji.emoji }}</span
     >
 
     <ObjectResizers
       :showResizers="showResizers"
-      :activePosition="activeResizePosition"
+      :activePosition="emoji.activeResizePosition"
       v-on:start-drag-resize="emitStartDragResize"
     />
   </div>
@@ -105,10 +115,10 @@ export default defineComponent({
 <style scoped>
 .emoji-container {
   position: absolute;
-  left: v-bind(currentX + "px");
-  top: v-bind(currentY + "px");
-  width: v-bind(currentWidth + "px");
-  height: v-bind(currentHeight + "px");
+  left: v-bind(emojiXPx);
+  top: v-bind(emojiYPx);
+  width: v-bind(emojiWidthPx);
+  height: v-bind(emojiHeightPx);
   z-index: v-bind(zIndex);
   background-color: transparent;
   padding: 15px 8px 8px 8px;
