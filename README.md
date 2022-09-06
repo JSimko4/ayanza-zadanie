@@ -2,8 +2,7 @@
 
 Pri implementovaní riešenia som sa rozhodol použiť **Vue.js 3** & **Options API**. V komponentoch som použil emitovanie akcií rodičovskému komponentu, pretože som sa od chalanov na pohovore dopočul, že nepoužívate VueX / Pinia.
 
-Mojim cieľom vrámci tohto zadania nebolo ho len zbúchať za čo najkratšiu dobu.
-Snažil som sa dosiahnuť čo najviac smooth & user friendly experience, či sa mi to podarilo už posúdi každý sám 👨‍⚖️. Budem rád za akýkoľvek feedback.
+Mojim cieľom nebolo zadanie zbúchať za čo najkratšiu dobu ale dosiahnuť čo najviac smooth & user friendly experience s ktorým budem spokojný. To či sa mi to podarilo už posúdi každý sám 👨‍⚖️. Budem rád za akýkoľvek feedback.
 
 Celkovo mi zadanie zabralo na vypracovanie okolo 25 hodín.
 
@@ -47,7 +46,7 @@ Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť
 
 - Ako ďalšie som implementoval to aby sa spojenie vymazalo ak sa vymaže jedna z poznámok a taktiež samotný spôsob ako sa bude spojenie vytvárať. Teda kliknem na ikonku spájania v poznámke -> začne sa vytváranie spojenia -> kliknem na druhu poznamku -> spojenie vytvorene.
 - User ale ešte nemal feedback na to ako vlastne to spojenie bude vyzerať ked ho vytváral, preto som pridal vizuálny prvok dočasného spojenia ktoré smeruje ku kurzoru. Neskôr v ten istý deň som k tomu pridal ešte vizualne zobrazenie pred dokončením spojenia pri hoveri nad poznamkou.
-- Potom som nakodil to aby používateľ mohol vypnúť vytváranie spojenia ak si to rozmyslel (klavesa ESC alebo opäť klikne na ikonku spájania).
+- Potom som nakódil to aby používateľ mohol vypnúť vytváranie spojenia ak si to rozmyslel. Pomocou stlačenia klávesy ESC alebo opätovného kliknutia na ikonku spájania.
 - Neskôr som pridal možnosť vytvoriť rekurzívne spojenie kedy ma poznamka connection sama na seba, neviem či by to niekto v živote použil ale chýbalo mi to tam 😁
 - Zakončil som to vytvorením základných štýlov pre horizontal / vertikálne menenie veľkosti, ktoré som chcel dokončiť na ďalší deň.
 
@@ -56,7 +55,7 @@ Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť
 - Pridal som horizontálne a vertikálne resizovanie.
 - Pridal som pop-up okno vrámci, ktorého si môže používateľ vybrať farbu poznámky a emoji.
 - Konečne som vymyslel a implementoval ako by bolo najvhodnejšie aby sa správali poznámky vrámci tabule a kedy by sa mali poznámky/emotikony dostať do popredia nad ostatné.
-- Refaktoring – v tomto momente som bol spokojný s funkcionalitou riešenia a pár hodin som venoval refaktoringu. Bolo by síce vhodné ešte vrámci škálovateľnosti riešenia vytvoriť spoločny array pre všetky whiteboard objekty. Zbaviť sa duplicity vrámci polôh a dimenzii pre whiteboard modely a viac dekomponovať WhiteBoard.vue. Myslím si ale, že kód je veľmi ľahko čitateľný a okomentovaný a preto to sú už len detaily, ktoré by bolo nutné spraviť ak by sa jednalo o reálny projekt. Na predvedenie schopností bolo podľa mňa dostatočne veľa priestoru.
+- Refaktoring – v tomto momente som bol spokojný s funkcionalitou riešenia a pár hodin som venoval refaktoringu. Bolo by síce vhodné ešte vrámci škálovateľnosti riešenia vytvoriť spoločny array pre všetky whiteboard objekty. Zbaviť sa duplicity vrámci polôh a dimenzii pre whiteboard modely a viac dekomponovať WhiteBoard.vue. Myslím si ale, že kód je veľmi ľahko čitateľný a okomentovaný a preto to sú už len detaily, ktoré by bolo nutné spraviť ak by sa jednalo o reálny projekt. Na predvedenie schopností bolo podľa mňa dostatočne veľa priestoru 🧡.
 
 # Run & Enjoy
 
