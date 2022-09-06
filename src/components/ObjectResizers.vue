@@ -92,12 +92,14 @@ export default defineComponent({
 }
 
 .resizer-vertical {
+  top: 0px;
   width: 3.5px;
   height: 100%;
   cursor: e-resize;
 }
 
 .resizer-horizontal {
+  right: 0px;
   width: 100%;
   height: 3.5px;
   cursor: n-resize;
@@ -105,21 +107,17 @@ export default defineComponent({
 
 .resizer-right {
   right: 0px;
-  top: 0px;
 }
 
 .resizer-left {
   left: 0px;
-  top: 0px;
 }
 
 .resizer-top {
-  right: 0px;
   top: 0px;
 }
 
 .resizer-bottom {
-  right: 0px;
   bottom: 0px;
 }
 

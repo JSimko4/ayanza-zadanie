@@ -31,8 +31,8 @@ export default defineComponent({
 
       currentDragged: undefined as Note | Emoji | undefined,
       currentResized: undefined as Note | Emoji | undefined,
-      currentConnected: undefined as Note | undefined,
-      temporaryEndOfLine: {} as Note | Cursor,
+      currentStartOfConnection: undefined as Note | undefined,
+      temporaryEndOfConnection: {} as Note | Cursor,
 
       emojiCodes: [
         "😍",
@@ -86,7 +86,7 @@ export default defineComponent({
         return e.id !== id;
       });
 
-      this.currentConnected = undefined;
+      this.currentStartOfConnection = undefined;
       this.removeConnectionByObjectsId(id);
     },
     removeEmoji(id: number) {
@@ -94,6 +94,7 @@ export default defineComponent({
         return e.id !== id;
       });
     },
+    // removing connections could be easily implemented with @click on connection & calling this function to remove by id
     removeConnectionByConnectionId(id: number) {
       this.connections = this.connections.filter(function (e: Connection) {
         return e.id !== id;
@@ -119,19 +120,19 @@ export default defineComponent({
 
     // connect board objects
     startConnection(id: number) {
-      this.currentConnected = this.stickyNotes.find(
+      this.currentStartOfConnection = this.stickyNotes.find(
         (element: Note) => element.id === id
       );
 
-      if (this.currentConnected === undefined) return;
-      this.currentConnected.activeConnector = true;
+      if (this.currentStartOfConnection === undefined) return;
+      this.currentStartOfConnection.activeConnector = true;
 
       // start connection from start object to cursor
       this.setTemporaryEndToCursor();
       this.connections.push({
         id: -1,
-        obj1: this.currentConnected,
-        obj2: this.temporaryEndOfLine,
+        obj1: this.currentStartOfConnection,
+        obj2: this.temporaryEndOfConnection,
       });
     },
     setTemporaryEnd(id: number) {
@@ -160,25 +161,28 @@ export default defineComponent({
         (element: Note) => element.id === id
       );
 
-      if (this.currentConnected === undefined || connectionEnd === undefined) {
+      if (
+        this.currentStartOfConnection === undefined ||
+        connectionEnd === undefined
+      ) {
         return;
       }
 
       // add new connection
       this.connections.push({
         id: this.currentId++,
-        obj1: this.currentConnected,
+        obj1: this.currentStartOfConnection,
         obj2: connectionEnd,
       });
 
       this.cancelConnection();
     },
     cancelConnection() {
-      if (this.currentConnected === undefined) return;
+      if (this.currentStartOfConnection === undefined) return;
 
       // reset start connection and active connector effect
-      this.currentConnected.activeConnector = false;
-      this.currentConnected = undefined;
+      this.currentStartOfConnection.activeConnector = false;
+      this.currentStartOfConnection = undefined;
 
       // remove object to cursor connection (animation)
       this.removeConnectionByConnectionId(-1);
@@ -331,8 +335,8 @@ export default defineComponent({
         this.currentResized.cursorInitialY = event.clientY;
 
         // set min dimensions (emoji/note)
-        const minWidth = "emoji" in this.currentResized ? 50 : 60;
-        const minHeight = "emoji" in this.currentResized ? 50 : 60;
+        const minWidth = "emoji" in this.currentResized ? 45 : 60;
+        const minHeight = "emoji" in this.currentResized ? 45 : 60;
 
         // update object dimensions
         this.updateResizedObject(
@@ -356,10 +360,6 @@ export default defineComponent({
     closeDialogs() {
       this.showPickNotesDialog = false;
       this.showPickEmojisDialog = false;
-    },
-    // increments current max z-index (needed for last dragged object to be in front)
-    incrementZIndex() {
-      this.currentMaxZIndex++;
     },
   },
   components: { StickyNote, StickyEmoji, ObjectConnection, WhiteBoardDialogs },
@@ -391,7 +391,7 @@ export default defineComponent({
       v-on:cancel-connection="cancelConnection"
       v-on:mouse-over="setTemporaryEnd"
       v-on:mouse-leave="setTemporaryEndToCursor"
-      v-on:increment-z-index="incrementZIndex"
+      v-on:increment-z-index="currentMaxZIndex++"
     />
 
     <StickyEmoji
@@ -403,7 +403,7 @@ export default defineComponent({
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
       v-on:start-drag-resize="startDragResize"
-      v-on:increment-z-index="incrementZIndex"
+      v-on:increment-z-index="currentMaxZIndex++"
     />
 
     <svg width="100%" height="100%">

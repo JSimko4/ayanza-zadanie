@@ -152,6 +152,6 @@ export default defineComponent({
 }
 
 .active-top-bar-icon {
-  color: #6a9ef7;
+  color: #3376e8;
 }
 </style>

@@ -5,5 +5,3 @@ export default interface Connection {
   currentWidth: number;
   currentHeight: number;
 }
-
-// later --> refactor for all board objects?
