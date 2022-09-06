@@ -13,6 +13,7 @@ export default defineComponent({
       text: "",
       showTopBar: false,
       zIndex: this.currentMaxZIndex,
+      lastZIndex: 0,
     };
   },
   computed: {
@@ -62,6 +63,10 @@ export default defineComponent({
 
     // drag-move functions
     emitStartDrag(event: any) {
+      this.zIndex = this.currentMaxZIndex + 1;
+      this.lastZIndex = this.zIndex;
+
+      this.$emit("increment-z-index");
       this.$emit("start-drag", event, this.note.id);
     },
     emitStopDrag() {
@@ -70,11 +75,12 @@ export default defineComponent({
 
     // show top bar functions
     focusNote() {
+      this.lastZIndex = this.zIndex;
       this.zIndex = this.currentMaxZIndex + 1;
-      this.$emit("increment-z-index");
       this.showTopBar = true;
     },
     focuOutNote() {
+      this.zIndex = this.lastZIndex;
       this.showTopBar = false;
     },
   },
