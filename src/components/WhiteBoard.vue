@@ -16,6 +16,7 @@ export default defineComponent({
   data() {
     return {
       currentId: 0,
+      currentMaxZIndex: 0,
 
       stickyNotes: [] as Note[],
       emojis: [] as Emoji[],
@@ -187,6 +188,7 @@ export default defineComponent({
     // drag-move board objects
     startDrag(event: any, id: number) {
       this.currentResized = undefined; // stop resizing
+      this.currentMaxZIndex++; // increase current max z-index (needed for last dragged object to be in front)
 
       // concat object arrays
       const combinedArr: (Note | Emoji)[] = [
@@ -413,6 +415,7 @@ export default defineComponent({
       :currentWidth="note.currentWidth"
       :currentX="note.currentX"
       :currentY="note.currentY"
+      :currentMaxZIndex="currentMaxZIndex"
       :activeResizePosition="note.activeResizePosition"
       :activeConnector="note.activeConnector"
       v-on:remove-note="removeNote"
@@ -435,6 +438,7 @@ export default defineComponent({
       :currentHeight="emoji.currentHeight"
       :currentX="emoji.currentX"
       :currentY="emoji.currentY"
+      :currentMaxZIndex="currentMaxZIndex"
       :activeResizePosition="emoji.activeResizePosition"
       v-on:remove-emoji="removeEmoji"
       v-on:start-drag="startDrag"

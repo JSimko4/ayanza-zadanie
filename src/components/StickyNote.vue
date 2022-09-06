@@ -14,6 +14,7 @@ export default defineComponent({
     color: String,
     activeResizePosition: String,
     activeConnector: Boolean,
+    currentMaxZIndex: { type: Number, required: true },
   },
   data() {
     return {
@@ -61,11 +62,10 @@ export default defineComponent({
     // show top bar functions
     focusNote() {
       this.showTopBar = true;
-      this.zIndex = 10;
+      this.zIndex = this.currentMaxZIndex + 1;
     },
     focuOutNote() {
       this.showTopBar = false;
-      this.zIndex = 0;
     },
   },
   components: { ObjectResizers },

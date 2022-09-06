@@ -11,6 +11,7 @@ export default defineComponent({
     currentY: Number,
     emoji: String,
     activeResizePosition: String,
+    currentMaxZIndex: { type: Number, required: true },
   },
   data() {
     return {
@@ -46,8 +47,8 @@ export default defineComponent({
 
     // drag-move functions
     emitStartDrag(event: any) {
+      this.zIndex = this.currentMaxZIndex + 1;
       this.$emit("start-drag", event, this.id);
-      this.zIndex = 10;
     },
     emitStopDrag() {
       this.$emit("stop-drag");
@@ -56,11 +57,9 @@ export default defineComponent({
     // show top bar functions
     focusEmoji() {
       this.showTopBar = true;
-      this.zIndex = 10;
     },
     focusOutEmoji() {
       this.showTopBar = false;
-      this.zIndex = 0;
     },
   },
   components: { ObjectResizers },
