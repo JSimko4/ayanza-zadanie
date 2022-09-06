@@ -1,6 +1,6 @@
 # O implementácii
 
-Pri implementovaní riešenia som sa rozhodol použiť Vue.js 3 & Options API. V komponentoch som použil emitovanie akcií rodičovskému komponentu, pretože som sa od chalanov na pohovore dopočul, že nepoužívate VueX / Pinia.
+Pri implementovaní riešenia som sa rozhodol použiť **Vue.js 3** & **Options API**. V komponentoch som použil emitovanie akcií rodičovskému komponentu, pretože som sa od chalanov na pohovore dopočul, že nepoužívate VueX / Pinia.
 
 Mojim cieľom vrámci tohto zadania nebolo ho len zbúchať za čo najkratšiu dobu.
 Snažil som sa dosiahnuť čo najviac smooth & user friendly experience, či sa mi to podarilo už posúdi každý sám 👨‍⚖️. Budem rád za akýkoľvek feedback.
@@ -11,7 +11,7 @@ Celkovo mi zadanie zabralo na vypracovanie okolo 25 hodín.
 
 V tento deň sa mi podarilo dokončiť level 0. Implementoval som teda:
 
-- základny layout stránky
+- základný layout stránky
 - štýly pre statické poznámky
 - pridávanie poznámok pomocou tlačidla na spodnej časti obrazovky
 - odstránenie poznámok
@@ -31,14 +31,16 @@ Za tento deň som teda spojazdnil level 2, neskôr som sa rozhodol ešte pridať
 
 Implementoval som:
 
-- vizualny prvok pre aktivny resizer
-- kontrolu prekročenia minimalnej velkosti daneho objektu (note/emoji) pre resizing
-- Začal som trochu rozmýšľať nad tým ako by bolo najvhodnejšie implementovať connections medzi poznámkami. Došiel som k tomu, že najjednoduchšie bude keď použijem svg line + šipka na konci. Na viac som v daný deň nemal čas.
-- Neskôr som si ešte všimol, že v zadaní resizing nemal byť aj pre emojis ale ked som ho uz mal nakodeny tak prečo by nie 😁
+- vizualny prvok pre aktívny resizer
+- kontrolu prekročenia minimálnej veľkosti daného objektu (note/emoji) pri resizovaní
+
+Začal som trochu rozmýšľať nad tým ako by bolo najvhodnejšie implementovať connections medzi poznámkami. Po chvíľke som dospel k tomu, že najšikovnejšie bude keď použijem svg line so šipkou na konci.
+
+Neskôr som si ešte všimol, že v zadaní resizing nemal byť aj pre emojis ale ked som ho uz mal nakodeny tak prečo by nie 😁
 
 ## 05.09.2022 [čas: 9h]
 
-V tento deň som mal k dispozícií 6h času vo vlaku Košice -> Bratislava na nakodenie spojenia. Začal som teda logikou ako sa spojenie bude správať a vytvorí, teda z ktorého bodu do ktorého pre dané 2 poznámky.
+V tento deň som mal k dispozícií 6h času vo vlaku Košice -> Bratislava na nakódenie spojenia. Začal som teda logikou ako sa spojenie bude správať a vytvárať, teda z ktorého bodu do ktorého pre dve dané poznámky.
 Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť zo 4 bodov (stred vrchnej časti, stred ľavej časti, atď..) prvej poznámky do 4 bodov druhej poznámky a na základe najmenšiej vzdialenosti vytvoriť medzi tymito 2 bodmi spojenie (svg line).
 
 ![Skicar skills](skicar/skicar-skillz2.png)
@@ -56,7 +58,7 @@ Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť
 - Konečne som vymyslel a implementoval ako by bolo najvhodnejšie aby sa správali poznámky vrámci tabule a kedy by sa mali poznámky/emotikony dostať do popredia nad ostatné.
 - Refaktoring – v tomto momente som bol spokojný s funkcionalitou riešenia a pár hodin som venoval refaktoringu. Bolo by síce vhodné ešte vrámci škálovateľnosti riešenia vytvoriť spoločny array pre všetky whiteboard objekty. Zbaviť sa duplicity vrámci polôh a dimenzii pre whiteboard modely a viac dekomponovať WhiteBoard.vue. Myslím si ale, že kód je veľmi ľahko čitateľný a okomentovaný a preto to sú už len detaily, ktoré by bolo nutné spraviť ak by sa jednalo o reálny projekt. Na predvedenie schopností bolo podľa mňa dostatočne veľa priestoru.
 
-# How to run
+# Run & Enjoy
 
 ```sh
 git clone https://github.com/JSimko4/ayanza-zadanie
