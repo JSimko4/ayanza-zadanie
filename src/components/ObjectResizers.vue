@@ -10,9 +10,6 @@ export default defineComponent({
     emitStartDragResize(event: any, position: string) {
       this.$emit("start-drag-resize", event, position);
     },
-    emitStopDragResize() {
-      this.$emit("stop-drag-resize");
-    },
   },
 });
 </script>
@@ -21,58 +18,50 @@ export default defineComponent({
   <section v-if="showResizers">
     <div
       class="resizer resizer-vertical resizer-right"
-      :class="{ 'active-resizer': activePosition === 'right' }"
+      :class="{ 'active-resizer2': activePosition === 'right' }"
       @mousedown.prevent="emitStartDragResize($event, 'right')"
-      @mouseup="emitStopDragResize"
     ></div>
 
     <div
       class="resizer resizer-vertical resizer-left"
-      :class="{ 'active-resizer': activePosition === 'left' }"
+      :class="{ 'active-resizer2': activePosition === 'left' }"
       @mousedown.prevent="emitStartDragResize($event, 'left')"
-      @mouseup="emitStopDragResize"
     ></div>
 
     <div
       class="resizer resizer-horizontal resizer-bottom"
-      :class="{ 'active-resizer': activePosition === 'bottom' }"
+      :class="{ 'active-resizer2': activePosition === 'bottom' }"
       @mousedown.prevent="emitStartDragResize($event, 'bottom')"
-      @mouseup="emitStopDragResize"
     ></div>
 
     <div
       class="resizer resizer-horizontal resizer-top"
-      :class="{ 'active-resizer': activePosition === 'top' }"
+      :class="{ 'active-resizer2': activePosition === 'top' }"
       @mousedown.prevent="emitStartDragResize($event, 'top')"
-      @mouseup="emitStopDragResize"
     ></div>
 
     <div
       class="corner-resizer resizer-top-left"
       :class="{ 'active-resizer': activePosition === 'top-left' }"
       @mousedown.prevent="emitStartDragResize($event, 'top-left')"
-      @mouseup="emitStopDragResize"
     ></div>
 
     <div
       class="corner-resizer resizer-bottom-left"
       :class="{ 'active-resizer': activePosition === 'bottom-left' }"
       @mousedown.prevent="emitStartDragResize($event, 'bottom-left')"
-      @mouseup="emitStopDragResize"
     ></div>
 
     <div
       class="corner-resizer resizer-top-right"
       :class="{ 'active-resizer': activePosition === 'top-right' }"
       @mousedown.prevent="emitStartDragResize($event, 'top-right')"
-      @mouseup="emitStopDragResize"
     ></div>
 
     <div
       class="corner-resizer resizer-bottom-right"
       :class="{ 'active-resizer': activePosition === 'bottom-right' }"
       @mousedown.prevent="emitStartDragResize($event, 'bottom-right')"
-      @mouseup="emitStopDragResize"
     ></div>
   </section>
 </template>
@@ -88,29 +77,29 @@ export default defineComponent({
   background: white;
 }
 
-.disabled-resizer {
-  background: white;
-}
-
-.active-resizer {
-  background: #6a9ef7;
-}
-
 .resizer {
   position: absolute;
   z-index: 50;
   background: #6a9ef7;
 }
 
+.active-resizer {
+  background: #6a9ef7;
+}
+
+.active-resizer2 {
+  background: #3376e8;
+}
+
 .resizer-vertical {
-  width: 3px;
+  width: 3.5px;
   height: 100%;
   cursor: e-resize;
 }
 
 .resizer-horizontal {
   width: 100%;
-  height: 3px;
+  height: 3.5px;
   cursor: n-resize;
 }
 

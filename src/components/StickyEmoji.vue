@@ -43,9 +43,6 @@ export default defineComponent({
     emitStartDragResize(event: any, position: string) {
       this.$emit("start-drag-resize", event, this.id, position);
     },
-    emitStopDragResize() {
-      this.$emit("stop-drag-resize");
-    },
 
     // drag-move functions
     emitStartDrag(event: any) {
@@ -101,7 +98,6 @@ export default defineComponent({
       :showResizers="showResizers"
       :activePosition="activeResizePosition"
       v-on:start-drag-resize="emitStartDragResize"
-      v-on:stop-drag-resize="emitStopDragResize"
     />
   </div>
 </template>

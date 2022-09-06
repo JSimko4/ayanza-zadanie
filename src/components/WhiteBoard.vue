@@ -218,8 +218,8 @@ export default defineComponent({
       minHeight: number,
       newWidth: number,
       newHeight: number,
-      newX: number | undefined,
-      newY: number | undefined
+      newX: number,
+      newY: number
     ) {
       if (this.currentResized !== undefined) {
         // check & update width
@@ -232,15 +232,9 @@ export default defineComponent({
           this.currentResized.currentHeight = newHeight;
         }
 
-        // update x coordinate
-        if (newX !== undefined) {
-          this.currentResized.currentX = newX;
-        }
-
-        // update y coordinate
-        if (newY !== undefined) {
-          this.currentResized.currentY = newY;
-        }
+        // update coordinates
+        this.currentResized.currentX = newX;
+        this.currentResized.currentY = newY;
 
         // stop resize
         if (newWidth < minWidth || newHeight < minHeight) {
@@ -268,13 +262,38 @@ export default defineComponent({
     },
     onDragResize(event: any) {
       if (this.currentResized !== undefined) {
-        let newWidth = 0;
-        let newHeight = 0;
-        let newX = undefined;
-        let newY = undefined;
+        let newWidth = this.currentResized.currentWidth;
+        let newHeight = this.currentResized.currentHeight;
+        let newX = this.currentResized.currentX;
+        let newY = this.currentResized.currentY;
 
         // calculate new dimensions
-        if (this.currentResized.activeResizePosition === "bottom-right") {
+        if (this.currentResized.activeResizePosition === "right") {
+          newWidth =
+            this.currentResized.currentWidth +
+            event.clientX -
+            this.currentResized.cursorInitialX;
+        } else if (this.currentResized.activeResizePosition === "left") {
+          newWidth =
+            this.currentResized.currentWidth -
+            (event.clientX - this.currentResized.cursorInitialX);
+          newX =
+            this.currentResized.currentX +
+            (event.clientX - this.currentResized.cursorInitialX);
+        } else if (this.currentResized.activeResizePosition === "top") {
+          newHeight =
+            this.currentResized.currentHeight -
+            (event.clientY - this.currentResized.cursorInitialY);
+          newY =
+            this.currentResized.currentY +
+            (event.clientY - this.currentResized.cursorInitialY);
+        } else if (this.currentResized.activeResizePosition === "bottom") {
+          newHeight =
+            this.currentResized.currentHeight +
+            (event.clientY - this.currentResized.cursorInitialY);
+        } else if (
+          this.currentResized.activeResizePosition === "bottom-right"
+        ) {
           newWidth =
             this.currentResized.currentWidth +
             event.clientX -
@@ -361,6 +380,7 @@ export default defineComponent({
 
   <section
     class="board"
+    @mouseup="stopDragResize"
     @mousemove.prevent="onMouseMove"
     @keydown.esc="cancelConnection"
   >
@@ -380,7 +400,6 @@ export default defineComponent({
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
       v-on:start-drag-resize="startDragResize"
-      v-on:stop-drag-resize="stopDragResize"
       v-on:start-connection="startConnection"
       v-on:finish-connection="finishConnection"
       v-on:cancel-connection="cancelConnection"
@@ -402,7 +421,6 @@ export default defineComponent({
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
       v-on:start-drag-resize="startDragResize"
-      v-on:stop-drag-resize="stopDragResize"
     />
 
     <svg width="100%" height="100%">
