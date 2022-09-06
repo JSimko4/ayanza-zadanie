@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineComponent, type PropType } from "vue";
-import type Note from "@/contracts/Note";
-import type Cursor from "@/contracts/Cursor";
-import type Point from "@/contracts/Point";
+import type Note from "@/models/Note";
+import type Cursor from "@/models/Cursor";
+import type Point from "@/models/Point";
 import LineToItself from "./ConnectionTypes/LineToItself.vue";
 import LineToOther from "./ConnectionTypes/LineToOther.vue";
 

@@ -1,13 +1,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import StickyNote from "./StickyNote.vue";
-import type Note from "@/contracts/Note";
-import type Emoji from "@/contracts/Emoji";
-import type Connection from "@/contracts/Connection";
+import type Note from "@/models/Note";
+import type Emoji from "@/models/Emoji";
+import type Connection from "@/models/Connection";
 import StickyEmoji from "./StickyEmoji.vue";
 import ObjectConnection from "./ObjectConnection/ObjectConnection.vue";
-import type Cursor from "@/contracts/Cursor";
-import FloatingDialog from "./FloatingDialog.vue";
+import type Cursor from "@/models/Cursor";
+import WhiteBoardDialogs from "./WhiteBoardDialogs.vue";
 
 export default defineComponent({
   props: {
@@ -17,6 +17,13 @@ export default defineComponent({
     return {
       currentId: 0,
       currentMaxZIndex: 0,
+      cursor: {
+        id: -1,
+        currentX: 0,
+        currentY: 0,
+        currentWidth: 3,
+        currentHeight: 3,
+      } as Cursor,
 
       stickyNotes: [] as Note[],
       emojis: [] as Emoji[],
@@ -25,15 +32,7 @@ export default defineComponent({
       currentDragged: undefined as Note | Emoji | undefined,
       currentResized: undefined as Note | Emoji | undefined,
       currentConnected: undefined as Note | undefined,
-
       temporaryEndOfLine: {} as Note | Cursor,
-      cursor: {
-        id: -1,
-        currentX: 0,
-        currentY: 0,
-        currentWidth: 3,
-        currentHeight: 3,
-      } as Cursor,
 
       emojiCodes: [
         "😍",
@@ -50,7 +49,6 @@ export default defineComponent({
         "🙊",
       ],
       colorCodes: ["#fdddef", "#e3d7fb", "#cff4e8", "#fff7cf"],
-
       showPickNotesDialog: false,
       showPickEmojisDialog: false,
     };
@@ -88,6 +86,7 @@ export default defineComponent({
         return e.id !== id;
       });
 
+      this.currentConnected = undefined;
       this.removeConnectionByObjectsId(id);
     },
     removeEmoji(id: number) {
@@ -363,7 +362,7 @@ export default defineComponent({
       this.currentMaxZIndex++;
     },
   },
-  components: { StickyNote, StickyEmoji, ObjectConnection, FloatingDialog },
+  components: { StickyNote, StickyEmoji, ObjectConnection, WhiteBoardDialogs },
 });
 </script>
 
@@ -417,36 +416,15 @@ export default defineComponent({
     </svg>
   </section>
 
-  <FloatingDialog :showDialog="showPickNotesDialog" @click="closeDialogs">
-    <template v-slot:header>
-      <h3>Choose note color</h3>
-    </template>
-    <template v-slot:body>
-      <div
-        class="dialog-element dialog-note"
-        v-for="color in colorCodes"
-        :key="color"
-        @click="addStickyNote(color)"
-        :style="{ background: color }"
-      ></div>
-    </template>
-  </FloatingDialog>
-
-  <FloatingDialog :showDialog="showPickEmojisDialog" @click="closeDialogs">
-    <template v-slot:header>
-      <h3>Choose new emoji</h3>
-    </template>
-    <template v-slot:body>
-      <div
-        class="dialog-element dialog-emoji"
-        v-for="emoji in emojiCodes"
-        :key="emoji"
-        @click="addEmoji(emoji)"
-      >
-        <span>{{ emoji }}</span>
-      </div>
-    </template>
-  </FloatingDialog>
+  <WhiteBoardDialogs
+    :showPickNotesDialog="showPickNotesDialog"
+    :showPickEmojisDialog="showPickEmojisDialog"
+    :colorCodes="colorCodes"
+    :emojiCodes="emojiCodes"
+    v-on:close-dialogs="closeDialogs"
+    v-on:add-note="addStickyNote"
+    v-on:add-emoji="addEmoji"
+  />
 
   <footer class="buttons-container">
     <span
@@ -466,29 +444,6 @@ export default defineComponent({
 </template>
 
 <style>
-.dialog-note {
-  width: 50px;
-  height: 50px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.33);
-}
-
-.dialog-emoji {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  padding: 5px;
-}
-
-.dialog-element {
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.dialog-element:hover {
-  transform: scale(1.3);
-}
-
 .board-header {
   display: flex;
   align-items: center;

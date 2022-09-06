@@ -1,5 +1,5 @@
 <script lang="ts">
-import type Emoji from "@/contracts/Emoji";
+import type Emoji from "@/models/Emoji";
 import { defineComponent, type PropType } from "vue";
 import ObjectResizers from "./ObjectResizers.vue";
 

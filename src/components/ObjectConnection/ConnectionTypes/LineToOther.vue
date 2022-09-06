@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, type PropType } from "vue";
-import type Point from "@/contracts/Point";
+import type Point from "@/models/Point";
 
 export default defineComponent({
   props: {

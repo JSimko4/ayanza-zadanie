@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, type PropType } from "vue";
 import ObjectResizers from "./ObjectResizers.vue";
-import type Note from "@/contracts/Note";
+import type Note from "@/models/Note";
 
 export default defineComponent({
   props: {
