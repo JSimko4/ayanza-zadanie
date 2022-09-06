@@ -100,8 +100,6 @@ export default defineComponent({
     <ObjectResizers
       :showResizers="showResizers"
       :activePosition="activeResizePosition"
-      :objectHeight="currentHeight"
-      :objectWidth="currentWidth"
       v-on:start-drag-resize="emitStartDragResize"
       v-on:stop-drag-resize="emitStopDragResize"
     />
@@ -117,7 +115,7 @@ export default defineComponent({
   height: v-bind(currentHeight + "px");
   z-index: v-bind(zIndex);
   background-color: transparent;
-  padding: 10px;
+  padding: 15px 8px 8px 8px;
 
   display: flex;
   flex-direction: column;
@@ -131,7 +129,7 @@ export default defineComponent({
 
 .top-bar {
   position: absolute;
-  top: -2px;
+  top: 5px;
   right: 7px;
   width: 100%;
 

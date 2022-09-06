@@ -3,8 +3,6 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   props: {
-    objectHeight: Number,
-    objectWidth: Number,
     showResizers: Boolean,
     activePosition: String,
   },
@@ -106,12 +104,12 @@ export default defineComponent({
 
 .resizer-vertical {
   width: 3px;
-  height: v-bind(objectHeight + "px");
+  height: 100%;
   cursor: e-resize;
 }
 
 .resizer-horizontal {
-  width: v-bind(objectWidth + "px");
+  width: 100%;
   height: 3px;
   cursor: n-resize;
 }

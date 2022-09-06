@@ -62,8 +62,8 @@ export default defineComponent({
         cursorInitialY: 0,
         currentX: 50,
         currentY: 50,
-        currentHeight: 40,
-        currentWidth: 40,
+        currentHeight: 55,
+        currentWidth: 55,
         activeResizePosition: "",
       });
     },
@@ -328,8 +328,8 @@ export default defineComponent({
 
         // set min dimensions (emoji)
         if ("emoji" in this.currentResized) {
-          minHeight = 35;
-          minWidth = 35;
+          minHeight = 50;
+          minWidth = 50;
         }
 
         // update object dimensions
