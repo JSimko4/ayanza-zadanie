@@ -23,7 +23,7 @@ V tento deň sa mi podarilo dokončiť level 0. Implementoval som teda:
 - Ďalej som nakodil možnosť pridávania emojis z výberu uloženého v poli reťazcov.
 - Väčšinu času som ale strávil pri implementovaní resizingu zo štyroch rohových bodov, ktoré som vrámci tohto dňa dokončil. To bola zábava na precvičenie skicar skills vzhľadom na to, že resizing vľavo a dohora vyžaduje aj určenie nových x,y pozícií.
 
-![Skicar skills](skicar/skicar-skillz2.png)
+![Skicar skills](skicar/skicar-skillz.png)
 
 Za tento deň som teda spojazdnil level 2, neskôr som sa rozhodol ešte pridať vertikálne a horizontálne resizovanie.
 
@@ -41,7 +41,7 @@ Implementoval som:
 V tento deň som mal k dispozícií 6h času vo vlaku Košice -> Bratislava na nakodenie spojenia. Začal som teda logikou ako sa spojenie bude správať a vytvorí, teda z ktorého bodu do ktorého pre dané 2 poznámky.
 Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť zo 4 bodov (stred vrchnej časti, stred ľavej časti, atď..) prvej poznámky do 4 bodov druhej poznámky a na základe najmenšiej vzdialenosti vytvoriť medzi tymito 2 bodmi spojenie (svg line).
 
-![Skicar skills](skicar/skicar-skillz.png)
+![Skicar skills](skicar/skicar-skillz2.png)
 
 - Ako ďalšie som implementoval to aby sa spojenie vymazalo ak sa vymaže jedna z poznámok a taktiež samotný spôsob ako sa bude spojenie vytvárať. Teda kliknem na ikonku spájania v poznámke -> začne sa vytváranie spojenia -> kliknem na druhu poznamku -> spojenie vytvorene.
 - User ale ešte nemal feedback na to ako vlastne to spojenie bude vyzerať ked ho vytváral, preto som pridal vizuálny prvok dočasného spojenia ktoré smeruje ku kurzoru. Neskôr v ten istý deň som k tomu pridal ešte vizualne zobrazenie pred dokončením spojenia pri hoveri nad poznamkou.
