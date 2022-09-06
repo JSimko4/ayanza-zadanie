@@ -188,7 +188,6 @@ export default defineComponent({
     // drag-move board objects
     startDrag(event: any, id: number) {
       this.currentResized = undefined; // stop resizing
-      this.currentMaxZIndex++; // increase current max z-index (needed for last dragged object to be in front)
 
       // concat object arrays
       const combinedArr: (Note | Emoji)[] = [
@@ -385,9 +384,15 @@ export default defineComponent({
         this.currentResized = undefined;
       }
     },
+
+    // utils
     closeDialogs() {
       this.showPickNotesDialog = false;
       this.showPickEmojisDialog = false;
+    },
+    incrementZIndex() {
+      // increment current max z-index (needed for last dragged object to be in front)
+      this.currentMaxZIndex++;
     },
   },
   components: { StickyNote, StickyEmoji, ObjectConnection, FloatingDialog },
@@ -427,6 +432,7 @@ export default defineComponent({
       v-on:cancel-connection="cancelConnection"
       v-on:mouse-over="setTemporaryEnd"
       v-on:mouse-leave="setTemporaryEndToCursor"
+      v-on:increment-z-index="incrementZIndex"
     />
 
     <StickyEmoji
@@ -444,6 +450,7 @@ export default defineComponent({
       v-on:start-drag="startDrag"
       v-on:stop-drag="stopDrag"
       v-on:start-drag-resize="startDragResize"
+      v-on:increment-z-index="incrementZIndex"
     />
 
     <svg width="100%" height="100%">
@@ -565,6 +572,7 @@ export default defineComponent({
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   padding: 5px;
   border-radius: 10px;
+  z-index: 2147483646;
 }
 
 .button {

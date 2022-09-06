@@ -17,7 +17,7 @@ export default defineComponent({
     return {
       showTopBar: false,
       showResizers: false,
-      zIndex: 0,
+      zIndex: this.currentMaxZIndex,
     };
   },
   computed: {
@@ -48,6 +48,7 @@ export default defineComponent({
     // drag-move functions
     emitStartDrag(event: any) {
       this.zIndex = this.currentMaxZIndex + 1;
+      this.$emit("increment-z-index");
       this.$emit("start-drag", event, this.id);
     },
     emitStopDrag() {

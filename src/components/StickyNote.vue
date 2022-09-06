@@ -20,7 +20,7 @@ export default defineComponent({
     return {
       text: "",
       showTopBar: false,
-      zIndex: 0,
+      zIndex: this.currentMaxZIndex,
     };
   },
   methods: {
@@ -61,8 +61,9 @@ export default defineComponent({
 
     // show top bar functions
     focusNote() {
-      this.showTopBar = true;
       this.zIndex = this.currentMaxZIndex + 1;
+      this.$emit("increment-z-index");
+      this.showTopBar = true;
     },
     focuOutNote() {
       this.showTopBar = false;
