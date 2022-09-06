@@ -248,13 +248,13 @@ export default defineComponent({
           this.currentResized.currentHeight = newHeight;
         }
 
-        // update coordinates
-        this.currentResized.currentX = newX;
-        this.currentResized.currentY = newY;
-
-        // stop resize
+        // stop resize if surpassed min dimensions
         if (newWidth < minWidth || newHeight < minHeight) {
           this.stopDragResize();
+        } else {
+          // update coordinates
+          this.currentResized.currentX = newX;
+          this.currentResized.currentY = newY;
         }
       }
     },
@@ -276,105 +276,73 @@ export default defineComponent({
         this.currentResized.cursorInitialY = event.clientY;
       }
     },
+    getNewDimensionPositions(
+      position: string,
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      cursorInitialX: number,
+      cursorInitialY: number,
+      cursorX: number,
+      cursorY: number
+    ) {
+      let newX = x;
+      let newY = y;
+      let [right, bottom] = [0, 0];
+
+      if (position.includes("right")) {
+        right = 1;
+      } else if (position.includes("left")) {
+        // position changes only if resizing from left or top
+        newX = x + (cursorX - cursorInitialX);
+        right = -1;
+      }
+      if (position.includes("bottom")) {
+        bottom = 1;
+      } else if (position.includes("top")) {
+        // position changes only if resizing from left or top
+        newY = y + (cursorY - cursorInitialY);
+        bottom = -1;
+      }
+
+      // calc new dimensions
+      const newWidth = width + right * (cursorX - cursorInitialX);
+      const newHeight = height + bottom * (cursorY - cursorInitialY);
+
+      return { newWidth, newHeight, newX, newY };
+    },
     onDragResize(event: any) {
       if (this.currentResized !== undefined) {
-        let newWidth = this.currentResized.currentWidth;
-        let newHeight = this.currentResized.currentHeight;
-        let newX = this.currentResized.currentX;
-        let newY = this.currentResized.currentY;
-
-        // calculate new dimensions
-        if (this.currentResized.activeResizePosition === "right") {
-          newWidth =
-            this.currentResized.currentWidth +
-            event.clientX -
-            this.currentResized.cursorInitialX;
-        } else if (this.currentResized.activeResizePosition === "left") {
-          newWidth =
-            this.currentResized.currentWidth -
-            (event.clientX - this.currentResized.cursorInitialX);
-          newX =
-            this.currentResized.currentX +
-            (event.clientX - this.currentResized.cursorInitialX);
-        } else if (this.currentResized.activeResizePosition === "top") {
-          newHeight =
-            this.currentResized.currentHeight -
-            (event.clientY - this.currentResized.cursorInitialY);
-          newY =
-            this.currentResized.currentY +
-            (event.clientY - this.currentResized.cursorInitialY);
-        } else if (this.currentResized.activeResizePosition === "bottom") {
-          newHeight =
-            this.currentResized.currentHeight +
-            (event.clientY - this.currentResized.cursorInitialY);
-        } else if (
-          this.currentResized.activeResizePosition === "bottom-right"
-        ) {
-          newWidth =
-            this.currentResized.currentWidth +
-            event.clientX -
-            this.currentResized.cursorInitialX;
-          newHeight =
-            this.currentResized.currentHeight +
-            event.clientY -
-            this.currentResized.cursorInitialY;
-        } else if (this.currentResized.activeResizePosition === "bottom-left") {
-          newWidth =
-            this.currentResized.currentWidth -
-            (event.clientX - this.currentResized.cursorInitialX);
-          newHeight =
-            this.currentResized.currentHeight +
-            (event.clientY - this.currentResized.cursorInitialY);
-          newX =
-            this.currentResized.currentX +
-            (event.clientX - this.currentResized.cursorInitialX);
-        } else if (this.currentResized.activeResizePosition === "top-right") {
-          newWidth =
-            this.currentResized.currentWidth +
-            (event.clientX - this.currentResized.cursorInitialX);
-          newHeight =
-            this.currentResized.currentHeight -
-            (event.clientY - this.currentResized.cursorInitialY);
-          newY =
-            this.currentResized.currentY +
-            (event.clientY - this.currentResized.cursorInitialY);
-        } else if (this.currentResized.activeResizePosition === "top-left") {
-          newWidth =
-            this.currentResized.currentWidth -
-            (event.clientX - this.currentResized.cursorInitialX);
-          newHeight =
-            this.currentResized.currentHeight -
-            (event.clientY - this.currentResized.cursorInitialY);
-          newX =
-            this.currentResized.currentX +
-            (event.clientX - this.currentResized.cursorInitialX);
-          newY =
-            this.currentResized.currentY +
-            (event.clientY - this.currentResized.cursorInitialY);
-        }
+        // get new dimensions (width, height) and positions (x,y)
+        const newDimensionsPositions = this.getNewDimensionPositions(
+          this.currentResized.activeResizePosition,
+          this.currentResized.currentX,
+          this.currentResized.currentY,
+          this.currentResized.currentWidth,
+          this.currentResized.currentHeight,
+          this.currentResized.cursorInitialX,
+          this.currentResized.cursorInitialY,
+          event.clientX,
+          event.clientY
+        );
 
         // update cursor initial positions
         this.currentResized.cursorInitialX = event.clientX;
         this.currentResized.cursorInitialY = event.clientY;
 
-        // set min dimensions (note)
-        let minWidth = 60;
-        let minHeight = 60;
-
-        // set min dimensions (emoji)
-        if ("emoji" in this.currentResized) {
-          minHeight = 50;
-          minWidth = 50;
-        }
+        // set min dimensions (emoji/note)
+        const minWidth = "emoji" in this.currentResized ? 50 : 60;
+        const minHeight = "emoji" in this.currentResized ? 50 : 60;
 
         // update object dimensions
         this.updateResizedObject(
           minWidth,
           minHeight,
-          newWidth,
-          newHeight,
-          newX,
-          newY
+          newDimensionsPositions.newWidth,
+          newDimensionsPositions.newHeight,
+          newDimensionsPositions.newX,
+          newDimensionsPositions.newY
         );
       }
     },
@@ -508,10 +476,6 @@ export default defineComponent({
     >
       {{ emojiCodes[0] }}
     </span>
-
-    <!-- 
-    <span class="material-icons button" @click="addEmoji">emoji_emotions</span>
-        -->
   </footer>
 </template>
 
