@@ -1,6 +1,4 @@
-# Ayanza zadanie
-
-# O implementácií zadania
+# O implementácii
 
 Pri implementovaní riešenia som sa rozhodol použiť Vue.js 3 & Options API. V komponentoch som použil emitovanie akcií rodičovskému komponentu, pretože som sa od chalanov na pohovore dopočul, že nepoužívate VueX / Pinia.
 
@@ -24,6 +22,8 @@ V tento deň sa mi podarilo dokončiť level 0. Implementoval som teda:
 - Najprv som sa rozhodol fixnúť bug z minulého dňa. Pri ťahaní poznámky @mousemove detekuje len pohyb vrámci daného elementu a akonáhle sa kurzor dostal mimo neho, tak sa premiestňovanie zastavilo.
 - Ďalej som nakodil možnosť pridávania emojis z výberu uloženého v poli reťazcov.
 - Väčšinu času som ale strávil pri implementovaní resizingu zo štyroch rohových bodov, ktoré som vrámci tohto dňa dokončil. To bola zábava na precvičenie skicar skills vzhľadom na to, že resizing vľavo a dohora vyžaduje aj určenie nových x,y pozícií.
+
+![Skicar skills](skicar/skicar-skillz2.png.png)
 
 Za tento deň som teda spojazdnil level 2, neskôr som sa rozhodol ešte pridať vertikálne a horizontálne resizovanie.
 
