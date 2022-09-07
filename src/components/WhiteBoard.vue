@@ -178,9 +178,9 @@ export default defineComponent({
         obj2: connectionEnd,
       });
 
-      this.cancelConnection();
+      this.cancelConnectionCreation();
     },
-    cancelConnection() {
+    cancelConnectionCreation() {
       if (this.currentStartOfConnection === undefined) return;
 
       // reset start connection and active connector effect
@@ -378,7 +378,7 @@ export default defineComponent({
     class="board"
     @mouseup="stopDragResize"
     @mousemove.prevent="onMouseMove"
-    @keydown.esc="cancelConnection"
+    @keydown.esc="cancelConnectionCreation"
   >
     <StickyNote
       v-for="note in stickyNotes"
@@ -391,7 +391,7 @@ export default defineComponent({
       v-on:start-drag-resize="startDragResize"
       v-on:start-connection="startConnection"
       v-on:finish-connection="finishConnection"
-      v-on:cancel-connection="cancelConnection"
+      v-on:cancel-connection="cancelConnectionCreation"
       v-on:mouse-over="setTemporaryEnd"
       v-on:mouse-leave="setTemporaryEndToCursor"
       v-on:increment-z-index="currentMaxZIndex++"
@@ -447,7 +447,10 @@ export default defineComponent({
     <span
       class="material-icons button"
       :class="{ 'active-removal': activeConnectionRemoval }"
-      @click="activeConnectionRemoval = !activeConnectionRemoval"
+      @click="
+        activeConnectionRemoval = !activeConnectionRemoval;
+        cancelConnectionCreation();
+      "
     >
       link_off
     </span>

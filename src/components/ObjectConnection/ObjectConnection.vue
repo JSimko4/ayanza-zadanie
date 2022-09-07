@@ -7,7 +7,6 @@ import LineToItself from "./ConnectionTypes/LineToItself.vue";
 import LineToOther from "./ConnectionTypes/LineToOther.vue";
 
 export default defineComponent({
-  emits: ["remove-connection"],
   props: {
     obj1: { type: Object as PropType<Note>, required: true },
     obj2: { type: Object as PropType<Note | Cursor>, required: true },
