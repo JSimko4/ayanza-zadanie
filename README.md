@@ -61,11 +61,10 @@ Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť
 ## 07.09.2022 [čas: 1-2h]
 
 - Pridal som ešte možnosť vymazávania vytvorených spojením pomocou tlačidla v spodnej časti obrazovky.
-- Fixol bug kedy nešlo označovať text napísaný v poznámke
+- Fixol som bug kedy nešlo označovať text napísaný v poznámke
 - Nahral som obrázky riešenia
-- Odovzdal zadanie
 
-# Výsledok
+## Výsledok
 
 ![Ukážka finálneho riešenia 1](documentation-images/vysledok1.png)
 ![Ukážka finálneho riešenia 2](documentation-images/vysledok2.png)
