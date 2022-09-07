@@ -377,7 +377,7 @@ export default defineComponent({
   <section
     class="board"
     @mouseup="stopDragResize"
-    @mousemove.prevent="onMouseMove"
+    @mousemove="onMouseMove"
     @keydown.esc="cancelConnectionCreation"
   >
     <StickyNote
