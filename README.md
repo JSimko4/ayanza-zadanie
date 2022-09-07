@@ -5,7 +5,7 @@ Pri implementovaní riešenia som sa rozhodol použiť **Vue.js 3** & **Options 
 Mojim cieľom nebolo zadanie zbúchať za čo najkratšiu dobu ale dosiahnuť čo najviac smooth & user friendly experience. To či sa mi to podarilo už posúdi každý sám 👨‍⚖️.
 Budem veľmi rád za akýkoľvek feedback.
 
-Celkovo mi zadanie zabralo na vypracovanie okolo 25 hodín.
+Celkovo mi zadanie zabralo na vypracovanie okolo 28 hodín.
 
 ## 02.09.2022 [čas: 3h]
 
@@ -57,6 +57,13 @@ Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť
 - Pridal som pop-up okno vrámci, ktorého si môže používateľ vybrať farbu poznámky a emoji.
 - Konečne som vymyslel a implementoval ako by bolo najvhodnejšie aby sa správali poznámky vrámci tabule a kedy by sa mali poznámky/emotikony dostať do popredia nad ostatné.
 - Refaktoring – v tomto momente som bol spokojný s funkcionalitou riešenia a pár hodin som venoval refaktoringu. Bolo by síce vhodné ešte vrámci škálovateľnosti riešenia vytvoriť spoločny array pre všetky whiteboard objekty. Zbaviť sa duplicity vrámci polôh a dimenzii pre whiteboard modely a viac dekomponovať WhiteBoard.vue. Myslím si ale, že kód je veľmi ľahko čitateľný a okomentovaný a preto to sú už len detaily, ktoré by bolo nutné spraviť ak by sa jednalo o reálny projekt. Na predvedenie schopností bolo podľa mňa dostatočne veľa priestoru 🧡.
+
+## 07.09.2022 [čas: 1-2h]
+
+- Pridal som ešte možnosť vymazávania vytvorených spojením pomocou tlačidla v spodnej časti obrazovky.
+- Fixol bug kedy nešlo označovať text napísaný v poznámke
+- Nahral som obrázky riešenia
+- Odovzdal zadanie
 
 # Výsledok
 
