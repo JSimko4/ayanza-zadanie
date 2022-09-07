@@ -23,7 +23,7 @@ V tento deň sa mi podarilo dokončiť level 0. Implementoval som teda:
 - Ďalej som nakodil možnosť pridávania emojis z výberu uloženého v poli reťazcov.
 - Väčšinu času som ale strávil pri implementovaní resizingu zo štyroch rohových bodov, ktoré som vrámci tohto dňa dokončil. To bola zábava na precvičenie skicar skills vzhľadom na to, že resizing vľavo a dohora vyžaduje aj určenie nových x,y pozícií.
 
-![Skicar skills](skicar/skicar-skillz.png)
+![Skicar skills](documentation-images/skicar-skillz.png)
 
 Za tento deň som teda spojazdnil level 2, neskôr som sa rozhodol ešte pridať vertikálne a horizontálne resizovanie.
 
@@ -43,7 +43,7 @@ Neskôr som si ešte všimol, že v zadaní resizing nemal byť aj pre emojis al
 V tento deň som mal k dispozícií 6h času vo vlaku Košice -> Bratislava na nakódenie spojenia. Začal som teda logikou ako sa spojenie bude správať a vytvárať, teda z ktorého bodu do ktorého pre dve dané poznámky.
 Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť zo 4 bodov (stred vrchnej časti, stred ľavej časti, atď..) prvej poznámky do 4 bodov druhej poznámky a na základe najmenšiej vzdialenosti vytvoriť medzi tymito 2 bodmi spojenie (svg line).
 
-![Skicar skills](skicar/skicar-skillz2.png)
+![Skicar skills](documentation-images/skicar-skillz2.png)
 
 - Ako ďalšie som implementoval to aby sa spojenie vymazalo ak sa vymaže jedna z poznámok a taktiež samotný spôsob ako sa bude spojenie vytvárať. Teda kliknem na ikonku spájania v poznámke -> začne sa vytváranie spojenia -> kliknem na druhu poznamku -> spojenie vytvorene.
 - User ale ešte nemal feedback na to ako vlastne to spojenie bude vyzerať ked ho vytváral, preto som pridal vizuálny prvok dočasného spojenia ktoré smeruje ku kurzoru. Neskôr v ten istý deň som k tomu pridal ešte vizualne zobrazenie pred dokončením spojenia pri hoveri nad poznamkou.
@@ -57,6 +57,12 @@ Rozhodol som sa, že user friendly spôsob by mohol byť počítať vzdialenosť
 - Pridal som pop-up okno vrámci, ktorého si môže používateľ vybrať farbu poznámky a emoji.
 - Konečne som vymyslel a implementoval ako by bolo najvhodnejšie aby sa správali poznámky vrámci tabule a kedy by sa mali poznámky/emotikony dostať do popredia nad ostatné.
 - Refaktoring – v tomto momente som bol spokojný s funkcionalitou riešenia a pár hodin som venoval refaktoringu. Bolo by síce vhodné ešte vrámci škálovateľnosti riešenia vytvoriť spoločny array pre všetky whiteboard objekty. Zbaviť sa duplicity vrámci polôh a dimenzii pre whiteboard modely a viac dekomponovať WhiteBoard.vue. Myslím si ale, že kód je veľmi ľahko čitateľný a okomentovaný a preto to sú už len detaily, ktoré by bolo nutné spraviť ak by sa jednalo o reálny projekt. Na predvedenie schopností bolo podľa mňa dostatočne veľa priestoru 🧡.
+
+# Výsledok
+
+![Ukážka finálneho riešenia 1](documentation-images/vysledok1.png)
+![Ukážka finálneho riešenia 2](documentation-images/vysledok2.png)
+![Ukážka finálneho riešenia 3](documentation-images/vysledok3.png)
 
 # Run & Enjoy
 

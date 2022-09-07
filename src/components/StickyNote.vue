@@ -119,6 +119,7 @@ export default defineComponent({
     <textarea
       v-model="text"
       class="note-input"
+      spellcheck="false"
       @focus="focusNote"
       @focusout="focuOutNote"
       @click="emitFinishConnection"
