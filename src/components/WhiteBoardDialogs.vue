@@ -3,6 +3,7 @@ import { defineComponent, type PropType } from "vue";
 import FloatingDialog from "./FloatingDialog.vue";
 
 export default defineComponent({
+  emits: ["close-dialogs", "add-note", "add-emoji"],
   props: {
     showPickNotesDialog: { type: Boolean, required: true },
     showPickEmojisDialog: { type: Boolean, required: true },

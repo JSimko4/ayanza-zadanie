@@ -7,6 +7,7 @@ import LineToItself from "./ConnectionTypes/LineToItself.vue";
 import LineToOther from "./ConnectionTypes/LineToOther.vue";
 
 export default defineComponent({
+  emits: ["remove-connection"],
   props: {
     obj1: { type: Object as PropType<Note>, required: true },
     obj2: { type: Object as PropType<Note | Cursor>, required: true },
@@ -97,6 +98,9 @@ export default defineComponent({
       const b = y1 - y2;
       return Math.sqrt(a * a + b * b);
     },
+    emitRemove() {
+      this.$emit("remove-connection");
+    },
   },
   components: { LineToItself, LineToOther },
 });
@@ -108,6 +112,7 @@ export default defineComponent({
     :is="getLineType"
     :startPoint="getShortestDistancePoints[0]"
     :endPoint="getShortestDistancePoints[1]"
+    v-on:remove-connection="emitRemove"
   />
 </template>
 

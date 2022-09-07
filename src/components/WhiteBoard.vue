@@ -51,6 +51,7 @@ export default defineComponent({
       colorCodes: ["#fdddef", "#e3d7fb", "#cff4e8", "#fff7cf"],
       showPickNotesDialog: false,
       showPickEmojisDialog: false,
+      activeConnectionRemoval: false,
     };
   },
   methods: {
@@ -94,11 +95,12 @@ export default defineComponent({
         return e.id !== id;
       });
     },
-    // removing connections could be easily implemented with @click on connection & calling this function to remove by id
-    removeConnectionByConnectionId(id: number) {
-      this.connections = this.connections.filter(function (e: Connection) {
-        return e.id !== id;
-      });
+    removeConnection(id: number, checkActiveConnectionRemoval: boolean) {
+      if (!checkActiveConnectionRemoval || this.activeConnectionRemoval) {
+        this.connections = this.connections.filter(function (e: Connection) {
+          return e.id !== id;
+        });
+      }
     },
     removeConnectionByObjectsId(id: number) {
       this.connections = this.connections.filter(function (e: Connection) {
@@ -120,6 +122,7 @@ export default defineComponent({
 
     // connect board objects
     startConnection(id: number) {
+      this.activeConnectionRemoval = false;
       this.currentStartOfConnection = this.stickyNotes.find(
         (element: Note) => element.id === id
       );
@@ -185,7 +188,7 @@ export default defineComponent({
       this.currentStartOfConnection = undefined;
 
       // remove object to cursor connection (animation)
-      this.removeConnectionByConnectionId(-1);
+      this.removeConnection(-1, false);
     },
 
     // drag-move board objects
@@ -412,6 +415,7 @@ export default defineComponent({
         :key="connection.id"
         :obj1="connection.obj1"
         :obj2="connection.obj2"
+        v-on:remove-connection="removeConnection(connection.id, true)"
       />
     </svg>
   </section>
@@ -434,11 +438,18 @@ export default defineComponent({
       note_add
     </span>
     <span
-      class="button"
+      class="button button-right-divider"
       style="width: 41px; height: 24px; box-sizing: border-box"
       @click="showPickEmojisDialog = true"
     >
       {{ emojiCodes[0] }}
+    </span>
+    <span
+      class="material-icons button"
+      :class="{ 'active-removal': activeConnectionRemoval }"
+      @click="activeConnectionRemoval = !activeConnectionRemoval"
+    >
+      link_off
     </span>
   </footer>
 </template>
@@ -448,7 +459,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 5px 0px;
+  height: 30px;
 }
 
 .board-name {
@@ -458,7 +469,7 @@ export default defineComponent({
 }
 
 .board {
-  height: 95vh;
+  height: calc(100vh - 30px);
   background-image: url("/src/assets/background.png");
 }
 
@@ -487,5 +498,9 @@ export default defineComponent({
 
 .button-right-divider {
   border-right: 2px solid rgba(128, 128, 128, 0.3);
+}
+
+.active-removal {
+  color: #3376e8;
 }
 </style>
